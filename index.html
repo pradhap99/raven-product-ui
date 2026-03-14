@@ -20,510 +20,631 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raven — AI Crypto Predictions</title>
-<meta name="description" content="Raven is an AI-powered crypto prediction platform. Price forecasting, sentiment analysis, and market intelligence.">
+<title>Raven AI — Crypto Prediction Platform</title>
+<meta name="description" content="AI-powered crypto prediction platform with real-time market analysis, Polymarket predictions, and institutional-grade accuracy.">
 
-<link rel="stylesheet" href="base.css">
-<link rel="stylesheet" href="style.css">
+<!-- Fonts -->
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+<!-- Three.js -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.183.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.183.0/examples/jsm/"
+  }
+}
+</script>
 
 <!-- Lucide Icons -->
-<script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- Background Layers -->
-<div class="bg-mesh"></div>
-<div class="bg-mesh-extra"></div>
+<!-- Three.js Background Canvas -->
+<canvas id="bg-canvas"></canvas>
 
-<!-- Particles -->
-<div class="particles-container">
-  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-  <div class="particle"></div>
-</div>
+<!-- Mouse-following spotlight -->
+<div id="mouse-spotlight"></div>
 
-<!-- Noise -->
-<div class="noise-overlay"></div>
-
-<!-- App Shell -->
-<div class="app-shell">
-
-  <!-- Mobile Overlay -->
-  <div class="mobile-overlay" id="mobileOverlay"></div>
-
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Raven Logo">
-        <path d="M8 26C8 26 6 22 8 18C10 14 14 12 16 8C16 8 14 14 16 16C18 14 20 10 22 8C22 8 26 14 26 18C26 22 24 26 20 28C16 30 12 28 8 26Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M16 8C16 8 15 4 16 2C17 4 16 8 16 8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M12 20C12 20 14 19 16 20C18 19 20 20 20 20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-        <circle cx="13" cy="16" r="1" fill="currentColor" opacity="0.7"/>
-        <circle cx="19" cy="16" r="1" fill="currentColor" opacity="0.7"/>
+<!-- Sidebar -->
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <svg class="raven-logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Raven AI Logo">
+        <path d="M20 4L8 14L12 18L8 28L14 24L18 36L22 24L28 28L32 18L36 14L24 4L22 10L20 4Z" fill="url(#logo-gradient)" stroke="rgba(0,229,255,0.3)" stroke-width="0.5"/>
+        <path d="M20 4L18 12L20 8L22 12L20 4Z" fill="#00E5FF" opacity="0.9"/>
+        <circle cx="17" cy="16" r="1.5" fill="#00E5FF"/>
+        <circle cx="23" cy="16" r="1.5" fill="#00E5FF" opacity="0.6"/>
+        <defs>
+          <linearGradient id="logo-gradient" x1="8" y1="4" x2="36" y2="36">
+            <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.9"/>
+            <stop offset="50%" stop-color="#8B5CF6" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#00E5FF" stop-opacity="0.4"/>
+          </linearGradient>
+        </defs>
       </svg>
-      <span>Raven</span>
+      <span class="logo-text">Raven<span class="logo-text-ai">AI</span></span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-indicator" id="nav-indicator"></div>
+
+    <a href="#crypto" class="nav-item active" data-page="crypto">
+      <i data-lucide="trending-up"></i>
+      <span>Crypto</span>
+    </a>
+
+    <a href="#polymarket" class="nav-item" data-page="polymarket">
+      <i data-lucide="bar-chart-3"></i>
+      <span>Polymarket</span>
+    </a>
+
+    <a href="#points" class="nav-item" data-page="points">
+      <i data-lucide="star"></i>
+      <span>Points</span>
+      <span class="nav-badge">New</span>
+    </a>
+
+    <div class="nav-section-label">
+      <span>Benchmark</span>
+      <i data-lucide="chevron-down" class="nav-section-chevron"></i>
     </div>
 
-    <nav class="sidebar-nav">
-      <a class="nav-item" data-page="polymarket" href="#polymarket">
-        <i data-lucide="bar-chart-2"></i>
-        <span>Polymarket</span>
-      </a>
-      <a class="nav-item active" data-page="crypto" href="#crypto">
-        <i data-lucide="trending-up"></i>
-        <span>Crypto</span>
-      </a>
-      <a class="nav-item" data-page="points" href="#points">
-        <i data-lucide="sparkles"></i>
-        <span>Points</span>
-      </a>
+    <a href="#score" class="nav-item nav-sub" data-page="score">
+      <i data-lucide="brain"></i>
+      <span>FT Reasoning Model</span>
+    </a>
 
-      <div class="nav-item" id="benchmarkToggle" data-toggle="benchmark">
-        <i data-lucide="bar-chart"></i>
-        <span>Benchmark</span>
-        <i data-lucide="chevron-down" class="nav-toggle-icon" id="benchmarkArrow"></i>
-      </div>
-      <div class="nav-children" id="benchmarkChildren">
-        <a class="nav-child-item" data-page="score" href="#score">FT Reasoning Model</a>
-        <a class="nav-child-item" data-page="math-accuracy" href="#math-accuracy">Mathematical accuracy</a>
-      </div>
-    </nav>
+    <a href="#math-accuracy" class="nav-item nav-sub" data-page="math-accuracy">
+      <i data-lucide="calculator"></i>
+      <span>Mathematical Accuracy</span>
+    </a>
+  </nav>
 
-    <div class="sidebar-footer">
-      <a href="https://t.me/" target="_blank" rel="noopener" class="social-btn" aria-label="Telegram">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9l20-7z"/></svg>
+  <div class="sidebar-footer">
+    <div class="sidebar-socials">
+      <a href="https://t.me/astron_ai" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Telegram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.73 2.77a2.18 2.18 0 0 0-2.17-.36L2.87 9.24a2.08 2.08 0 0 0 .15 3.91l4.37 1.31 1.69 5.28a1.12 1.12 0 0 0 1.83.46l2.6-2.34 4.43 3.33a2.08 2.08 0 0 0 3.22-1.25l3.38-14.5a2.18 2.18 0 0 0-.81-2.67Z"/><path d="m10.08 14.46-1 4.76"/><path d="m15.7 8.56-5.62 5.9"/></svg>
       </a>
-      <a href="https://x.com/" target="_blank" rel="noopener" class="social-btn" aria-label="X / Twitter">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      <a href="https://x.com/Astron_Markets" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X / Twitter">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
       </a>
-      <a href="https://discord.gg/" target="_blank" rel="noopener" class="social-btn" aria-label="Discord">
+      <a href="https://discord.com/invite/yWCBPsqmdw" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Discord">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
       </a>
     </div>
-  </aside>
+    <div class="sidebar-attribution">
+      <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+    </div>
+  </div>
+</aside>
 
-  <!-- Main Area -->
-  <div class="main-area">
-
-    <!-- Top Bar -->
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
-          <i data-lucide="menu"></i>
-        </button>
-      </div>
-      <button class="login-btn">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        Login with X
-      </button>
-    </header>
-
-    <!-- Content Area -->
-    <div class="content-area" id="contentArea">
-
-      <!-- ════════════════════════════════════
-           CRYPTO PAGE
-           ════════════════════════════════════ -->
-      <div class="page-view" id="page-crypto" data-page="crypto">
-        <div class="page-content stagger-in">
-          <h1 class="page-title">Crypto Market Predictions</h1>
-          <div class="page-subtitle">
-            <span class="tag">Raven</span>
-            <span class="desc">I predict what the market hasn't priced yet.</span>
-          </div>
-
-          <div class="feature-tabs" id="cryptoTabs">
-            <button class="feature-tab active" data-tab="price">Price forecasting</button>
-            <button class="feature-tab" data-tab="sentiment">Sentimental Analysis</button>
-            <button class="feature-tab" data-tab="logic">Logic Reasoning <span class="coming-soon">Coming Soon</span></button>
-            <button class="feature-tab" data-tab="event">Event Prediction <span class="coming-soon">Coming Soon</span></button>
-            <div class="tab-indicator" id="cryptoTabIndicator"></div>
-          </div>
-
-          <div class="prompt-pills">
-            <button class="prompt-pill">
-              <span>Will Bitcoin hit $100k by end of 2026?</span>
-              <i data-lucide="arrow-right" class="arrow"></i>
-            </button>
-            <button class="prompt-pill">
-              <span>Ethereum price prediction for next 30 days</span>
-              <i data-lucide="arrow-right" class="arrow"></i>
-            </button>
-            <button class="prompt-pill">
-              <span>What is the sentiment around Solana right now?</span>
-              <i data-lucide="arrow-right" class="arrow"></i>
-            </button>
-            <button class="prompt-pill">
-              <span>Compare BTC and ETH momentum indicators</span>
-              <i data-lucide="arrow-right" class="arrow"></i>
-            </button>
-            <button class="prompt-pill">
-              <span>Top altcoins likely to outperform this quarter</span>
-              <i data-lucide="arrow-right" class="arrow"></i>
-            </button>
-          </div>
-
-          <div class="input-bar-wrapper">
-            <div class="input-bar">
-              <i data-lucide="search" style="width:18px;height:18px;color:var(--text-tertiary);flex-shrink:0;"></i>
-              <input type="text" placeholder="Ask me anything about crypto markets..." />
-              <button class="input-send-btn">
-                <i data-lucide="arrow-up"></i>
-              </button>
-            </div>
-            <div class="filter-chips">
-              <button class="filter-chip"><span>Crypto</span><i data-lucide="chevron-down"></i></button>
-              <button class="filter-chip"><span>Timeframe</span><i data-lucide="chevron-down"></i></button>
-              <button class="filter-chip"><span>Analysis</span><i data-lucide="chevron-down"></i></button>
-              <button class="filter-chip"><span>Assets</span><i data-lucide="chevron-down"></i></button>
-              <button class="filter-chip"><span>Score</span><i data-lucide="chevron-down"></i></button>
-            </div>
-            <div class="premium-banner">
-              <span>⚡</span>
-              <span>Unlock more with paid plans →</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ════════════════════════════════════
-           POLYMARKET PAGE
-           ════════════════════════════════════ -->
-      <div class="page-view" id="page-polymarket" data-page="polymarket">
-        <div class="page-content stagger-in">
-          <h1 class="page-title">Polymarket Predictions</h1>
-
-          <div class="filter-bar">
-            <button class="filter-bar-btn active">Polymarket</button>
-            <button class="filter-bar-btn">Liquidity</button>
-            <button class="filter-bar-btn">Volume</button>
-            <button class="filter-bar-btn">Timeframe</button>
-            <button class="filter-bar-btn">Newest</button>
-            <button class="filter-bar-btn">Ending Soon</button>
-            <button class="filter-bar-btn">Score</button>
-          </div>
-
-          <div class="carousel-wrapper">
-            <div class="carousel-track" id="carouselTrack">
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">Russia x Ukraine ceasefire in 2025?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 38%</div>
-                  <div class="vote-bar no">No 63%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$12m Vol</span>
-                </div>
-              </div>
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">GTA VI released in 2025?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 3%</div>
-                  <div class="vote-bar no">No 97%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$11m Vol</span>
-                </div>
-              </div>
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">China invade Taiwan before 2026?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 10%</div>
-                  <div class="vote-bar no">No 90%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$11m Vol</span>
-                </div>
-              </div>
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">The Masters 2025 Winner?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 5%</div>
-                  <div class="vote-bar no">No 95%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$42m Vol</span>
-                </div>
-              </div>
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">Xi Jinping out before 2027?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 9%</div>
-                  <div class="vote-bar no">No 91%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$7m Vol</span>
-                </div>
-              </div>
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">Republican Nominee 2028?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 2%</div>
-                  <div class="vote-bar no">No 98%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$409m Vol</span>
-                </div>
-              </div>
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">2026 NBA Champion?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 35%</div>
-                  <div class="vote-bar no">No 66%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$250m Vol</span>
-                </div>
-              </div>
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">La Liga 2024–25 Winner?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 0%</div>
-                  <div class="vote-bar no">No 100%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$156m Vol</span>
-                </div>
-              </div>
-
-              <div class="prediction-card">
-                <span class="card-tag">Monthly</span>
-                <h3 class="card-title">Texas Senate Primary Winner?</h3>
-                <div class="vote-bars">
-                  <div class="vote-bar yes">Yes 39%</div>
-                  <div class="vote-bar no">No 62%</div>
-                </div>
-                <div class="card-footer">
-                  <button class="ask-raven-btn">Ask Raven</button>
-                  <span class="card-meta">$10m Vol</span>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="carousel-dots" id="carouselDots"></div>
-          </div>
-
-          <div class="input-bar-wrapper">
-            <div class="input-bar">
-              <i data-lucide="search" style="width:18px;height:18px;color:var(--text-tertiary);flex-shrink:0;"></i>
-              <input type="text" placeholder="Ask Raven about any prediction market..." />
-              <button class="input-send-btn">
-                <i data-lucide="arrow-up"></i>
-              </button>
-            </div>
-            <div class="filter-chips">
-              <button class="filter-chip"><span>Crypto</span><i data-lucide="chevron-down"></i></button>
-              <button class="filter-chip"><span>Timeframe</span><i data-lucide="chevron-down"></i></button>
-              <button class="filter-chip"><span>Analysis</span><i data-lucide="chevron-down"></i></button>
-              <button class="filter-chip"><span>Assets</span><i data-lucide="chevron-down"></i></button>
-              <button class="filter-chip"><span>Score</span><i data-lucide="chevron-down"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ════════════════════════════════════
-           SCORE PAGE (FT Reasoning Model)
-           ════════════════════════════════════ -->
-      <div class="page-view" id="page-score" data-page="score">
-        <div class="page-content stagger-in">
-          <h1 class="page-title">FT Reasoning Model</h1>
-
-          <p class="model-description">
-            Sota-Gpt-oss-20b fine-tuned with AdaLoRA on GPU-optimized infrastructure. A production-grade AI model built specifically for crypto market reasoning, achieving state-of-the-art performance across price prediction, directional analysis, and logical inference tasks.
-          </p>
-
-          <div class="metrics-grid" id="metricsGrid">
-            <div class="scan-line"></div>
-
-            <div class="metric-card">
-              <div class="metric-value" data-count="98.6" data-suffix="%">0%</div>
-              <div class="metric-label">Price Prediction Accuracy</div>
-              <div class="metric-sub">Across 150 test posts</div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-value purple" data-count="99.9" data-suffix="%">0%</div>
-              <div class="metric-label">Parameter Reduction</div>
-              <div class="metric-sub">21M vs 20B parameters</div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-value green">Production Ready</div>
-              <div class="metric-label">API Server</div>
-              <div class="metric-sub">Deployed and serving</div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-value yellow" data-count="0.630" data-suffix="">0</div>
-              <div class="metric-label">BERT Score</div>
-              <div class="metric-sub">Semantic similarity metric</div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-value" data-count="30" data-suffix="+" data-prefix="">0</div>
-              <div class="metric-label">Pages Academic Documentation</div>
-              <div class="metric-sub">Research paper published</div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-value green">&lt;1s</div>
-              <div class="metric-label">Real-time Processing</div>
-              <div class="metric-sub">Inference latency</div>
-            </div>
-          </div>
-
-          <div class="results-section">
-            <h2 class="results-title">
-              <span class="live-dot"></span>
-              Live Results
-            </h2>
-
-            <table class="results-table">
-              <thead>
-                <tr>
-                  <th>Metric</th>
-                  <th>Value</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Posts Evaluated</td>
-                  <td class="value">150 / 150</td>
-                  <td><span style="color:var(--accent-green)">● Complete</span></td>
-                </tr>
-                <tr>
-                  <td>Price Accuracy</td>
-                  <td class="value good">98.6%</td>
-                  <td><span style="color:var(--accent-green)">● Excellent</span></td>
-                </tr>
-                <tr>
-                  <td>Logic Score</td>
-                  <td class="value">80.9%</td>
-                  <td><span style="color:var(--accent-cyan)">● Good</span></td>
-                </tr>
-                <tr>
-                  <td>Direction Accuracy</td>
-                  <td class="value good">94.7%</td>
-                  <td><span style="color:var(--accent-green)">● Excellent</span></td>
-                </tr>
-                <tr>
-                  <td>Processing Speed</td>
-                  <td class="value good">&lt;1s</td>
-                  <td><span style="color:var(--accent-green)">● Optimal</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ════════════════════════════════════
-           MATH ACCURACY PAGE
-           ════════════════════════════════════ -->
-      <div class="page-view" id="page-math-accuracy" data-page="math-accuracy">
-        <div class="page-content stagger-in">
-          <h1 class="page-title">Mathematical Accuracy</h1>
-
-          <div class="platform-tabs" id="platformTabs">
-            <button class="platform-tab active" data-platform="kryos">Kryos</button>
-            <button class="platform-tab" data-platform="helion">Helion</button>
-            <button class="platform-tab" data-platform="astrax">Astrax</button>
-          </div>
-
-          <div class="metric-tabs" id="metricTabs">
-            <button class="metric-tab-btn active" data-metric="pdds">PDDS score</button>
-            <button class="metric-tab-btn" data-metric="directional">Directional accuracy</button>
-            <button class="metric-tab-btn" data-metric="price">Price accuracy</button>
-            <div class="metric-tab-indicator" id="metricTabIndicator"></div>
-          </div>
-
-          <div class="toggle-row">
-            <span class="toggle-label">Temporal model preference</span>
-            <div class="toggle-switch" id="temporalToggle"></div>
-          </div>
-
-          <div class="chart-placeholder">
-            <div class="chart-placeholder-text">
-              <i data-lucide="loader-2" style="width:16px;height:16px;animation:spin 1.5s linear infinite;"></i>
-              Loading visualization data...
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ════════════════════════════════════
-           POINTS PAGE
-           ════════════════════════════════════ -->
-      <div class="page-view" id="page-points" data-page="points">
-        <div class="page-content">
-          <div class="points-empty">
-            <div class="icon-wrapper">
-              <i data-lucide="wallet"></i>
-            </div>
-            <h2>Connect to View Points</h2>
-            <p>Please connect your wallet and login with Twitter to view your points and rewards.</p>
-            <button class="connect-btn">
-              <i data-lucide="link" style="width:18px;height:18px;"></i>
-              Connect Wallet
-            </button>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /content-area -->
-  </div><!-- /main-area -->
-</div><!-- /app-shell -->
-
-<!-- Attribution Footer -->
-<footer class="pplx-attribution">
-  <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">
-    Created with Perplexity Computer
+<!-- Mobile Bottom Nav -->
+<nav id="mobile-nav">
+  <a href="#crypto" class="mobile-nav-item active" data-page="crypto">
+    <i data-lucide="trending-up"></i>
+    <span>Crypto</span>
   </a>
-</footer>
+  <a href="#polymarket" class="mobile-nav-item" data-page="polymarket">
+    <i data-lucide="bar-chart-3"></i>
+    <span>Polymarket</span>
+  </a>
+  <a href="#points" class="mobile-nav-item" data-page="points">
+    <i data-lucide="star"></i>
+    <span>Points</span>
+  </a>
+  <a href="#score" class="mobile-nav-item" data-page="score">
+    <i data-lucide="brain"></i>
+    <span>Score</span>
+  </a>
+  <a href="#math-accuracy" class="mobile-nav-item" data-page="math-accuracy">
+    <i data-lucide="calculator"></i>
+    <span>Math</span>
+  </a>
+</nav>
 
-<!-- Spin animation for loader -->
-<style>
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-</style>
+<!-- Main Content -->
+<main id="main-content">
 
-<script src="app.js"></script>
+  <!-- Topbar -->
+  <header id="topbar">
+    <div class="topbar-left">
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+        <i data-lucide="menu"></i>
+      </button>
+      <div class="topbar-search">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" placeholder="Search predictions, markets..." class="search-input" id="search-input">
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" aria-label="Notifications">
+        <i data-lucide="bell"></i>
+        <span class="notification-dot"></span>
+      </button>
+      <button class="wallet-btn" id="wallet-btn">
+        <i data-lucide="wallet"></i>
+        <span>Connect Wallet</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Container -->
+  <div id="page-container">
+
+    <!-- =================== CRYPTO PAGE =================== -->
+    <section id="page-crypto" class="page active">
+      <div class="page-header">
+        <div class="page-header-content">
+          <div class="page-badge">
+            <svg class="raven-icon-sm" viewBox="0 0 40 40" fill="none"><path d="M20 4L8 14L12 18L8 28L14 24L18 36L22 24L28 28L32 18L36 14L24 4L22 10L20 4Z" fill="url(#logo-gradient-sm)" stroke="rgba(0,229,255,0.3)" stroke-width="0.5"/><circle cx="17" cy="16" r="1.5" fill="#00E5FF"/><defs><linearGradient id="logo-gradient-sm" x1="8" y1="4" x2="36" y2="36"><stop offset="0%" stop-color="#00E5FF" stop-opacity="0.8"/><stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.5"/></linearGradient></defs></svg>
+            <span>Raven AI</span>
+          </div>
+          <h1 class="page-title">Crypto Market Predictions</h1>
+          <p class="page-subtitle">I predict what the market hasn't priced yet.</p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-container">
+        <div class="tabs">
+          <button class="tab active" data-tab="price-forecasting">Price Forecasting</button>
+          <button class="tab" data-tab="sentiment">Sentimental Analysis</button>
+          <button class="tab disabled" data-tab="logic">Logic Reasoning <span class="tab-badge">Soon</span></button>
+          <button class="tab disabled" data-tab="event">Event Prediction <span class="tab-badge">Soon</span></button>
+          <div class="tab-indicator" id="tab-indicator"></div>
+        </div>
+      </div>
+
+      <!-- Question Cards Grid -->
+      <div class="cards-grid crypto-grid">
+        <div class="glass-card question-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="card-icon-wrap"><i data-lucide="message-circle"></i></div>
+            <p class="card-question">Tell me the sentiment around ETH?</p>
+            <div class="card-meta">
+              <span class="card-tag">Sentiment</span>
+              <span class="card-tag">ETH</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card question-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="card-icon-wrap"><i data-lucide="clock"></i></div>
+            <p class="card-question">What be the price of BTC after 4 hours?</p>
+            <div class="card-meta">
+              <span class="card-tag">Price</span>
+              <span class="card-tag">BTC</span>
+              <span class="card-tag">4H</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card question-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="card-icon-wrap"><i data-lucide="trending-down"></i></div>
+            <p class="card-question">What's the primarily reason of Bitcoin falling recently?</p>
+            <div class="card-meta">
+              <span class="card-tag">Analysis</span>
+              <span class="card-tag">BTC</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card question-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="card-icon-wrap"><i data-lucide="line-chart"></i></div>
+            <p class="card-question">What be the price of ETH after 4 hours?</p>
+            <div class="card-meta">
+              <span class="card-tag">Price</span>
+              <span class="card-tag">ETH</span>
+              <span class="card-tag">4H</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card question-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="card-icon-wrap"><i data-lucide="help-circle"></i></div>
+            <p class="card-question">Should I invest in Bitcoin now?</p>
+            <div class="card-meta">
+              <span class="card-tag">Advice</span>
+              <span class="card-tag">BTC</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upgrade Banner -->
+      <div class="upgrade-banner glass-card">
+        <div class="card-border-gradient"></div>
+        <div class="banner-content">
+          <div class="banner-icon"><i data-lucide="lock"></i></div>
+          <div class="banner-text">
+            <h3>Unlock more with paid plans</h3>
+            <p>Get unlimited predictions, priority processing, and advanced analytics.</p>
+          </div>
+          <button class="btn-primary">Upgrade Now</button>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-wrapper">
+          <i data-lucide="sparkles" class="input-icon"></i>
+          <input type="text" placeholder="Ask me anything about the crypto market..." class="main-input" id="crypto-input">
+          <button class="ask-raven-btn" id="ask-raven-btn">
+            <span>Ask Raven</span>
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+        <div class="filter-pills">
+          <button class="pill active">Crypto</button>
+          <button class="pill">Timeframe</button>
+          <button class="pill">Analysis</button>
+          <button class="pill">Assets</button>
+          <button class="pill">Score</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== POLYMARKET PAGE =================== -->
+    <section id="page-polymarket" class="page">
+      <div class="page-header">
+        <div class="page-header-content">
+          <div class="page-badge">
+            <svg class="raven-icon-sm" viewBox="0 0 40 40" fill="none"><path d="M20 4L8 14L12 18L8 28L14 24L18 36L22 24L28 28L32 18L36 14L24 4L22 10L20 4Z" fill="url(#logo-gradient-sm)" stroke="rgba(0,229,255,0.3)" stroke-width="0.5"/><circle cx="17" cy="16" r="1.5" fill="#00E5FF"/></svg>
+            <span>Raven AI</span>
+          </div>
+          <h1 class="page-title">Polymarket Predictions</h1>
+          <p class="page-subtitle">I predict what the market hasn't priced yet.</p>
+        </div>
+      </div>
+
+      <div class="cards-grid polymarket-grid" id="polymarket-grid">
+        <!-- Cards injected by JS -->
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-wrapper">
+          <i data-lucide="sparkles" class="input-icon"></i>
+          <input type="text" placeholder="Ask about any prediction market..." class="main-input">
+          <button class="ask-raven-btn">
+            <span>Ask Raven</span>
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+        <div class="filter-pills">
+          <button class="pill active">Polymarket</button>
+          <button class="pill">Liquidity</button>
+          <button class="pill">Volume</button>
+          <button class="pill">Timeframe</button>
+          <button class="pill">Newest</button>
+          <button class="pill">Ending Soon</button>
+          <button class="pill">Score</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== SCORE PAGE =================== -->
+    <section id="page-score" class="page">
+      <div class="page-header">
+        <div class="page-header-content">
+          <div class="page-badge score-badge">
+            <span>🏆</span>
+            <span>Raven AI</span>
+          </div>
+          <h1 class="page-title">FT Reasoning Model</h1>
+          <p class="page-subtitle">Sota-Gpt-oss-20b with Adaptive LoRA (AdaLoRA) fine-tuning — GPU-optimized for real-time crypto market analysis and prediction.</p>
+        </div>
+      </div>
+
+      <!-- Achievement Cards -->
+      <div class="cards-grid achievement-grid">
+        <div class="glass-card achievement-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="achievement-icon cyan"><i data-lucide="target"></i></div>
+            <div class="achievement-value count-up" data-value="98.6" data-suffix="%">0%</div>
+            <h3 class="achievement-title">Price Prediction Accuracy</h3>
+            <p class="achievement-desc">Industry-leading performance on Bitcoin market predictions.</p>
+          </div>
+        </div>
+
+        <div class="glass-card achievement-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="achievement-icon purple"><i data-lucide="minimize-2"></i></div>
+            <div class="achievement-value count-up" data-value="99.9" data-suffix="%">0%</div>
+            <h3 class="achievement-title">Parameter Reduction</h3>
+            <p class="achievement-desc">Only 21M trainable parameters vs 20B base model.</p>
+          </div>
+        </div>
+
+        <div class="glass-card achievement-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="achievement-icon green"><i data-lucide="rocket"></i></div>
+            <div class="achievement-value">Production Ready</div>
+            <h3 class="achievement-title">Live Deployment</h3>
+            <p class="achievement-desc">OpenAI-compatible API server with live market integration.</p>
+          </div>
+        </div>
+
+        <div class="glass-card achievement-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="achievement-icon cyan"><i data-lucide="flask-conical"></i></div>
+            <div class="achievement-value">BERT: <span class="mono-value count-up" data-value="0.630" data-decimals="3">0.000</span></div>
+            <h3 class="achievement-title">Comprehensive Benchmarks</h3>
+            <p class="achievement-desc">BERT Score: 0.630, ROUGE-L evaluation framework.</p>
+          </div>
+        </div>
+
+        <div class="glass-card achievement-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="achievement-icon purple"><i data-lucide="file-text"></i></div>
+            <div class="achievement-value"><span class="mono-value count-up" data-value="30" data-suffix="+">0</span> Pages</div>
+            <h3 class="achievement-title">Academic Documentation</h3>
+            <p class="achievement-desc">Complete LaTeX report with 30+ pages of analysis.</p>
+          </div>
+        </div>
+
+        <div class="glass-card achievement-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="achievement-icon green"><i data-lucide="zap"></i></div>
+            <div class="achievement-value"><span class="mono-value count-up" data-value="150" data-suffix="+">0</span> Posts</div>
+            <h3 class="achievement-title">Real-time Processing</h3>
+            <p class="achievement-desc">150+ post analysis with LunarCrush API integration.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Evaluation Tables -->
+      <div class="tables-section">
+        <div class="glass-card table-card">
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <h3 class="table-title"><i data-lucide="table-2"></i> Evaluation Results</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr><th>Metric</th><th>Score</th><th>Rating</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>BERT Score</td><td class="mono-value">0.630</td><td><span class="rating-badge good">Good</span></td></tr>
+                  <tr><td>ROUGE-L</td><td class="mono-value">0.142</td><td><span class="rating-badge moderate">Moderate</span></td></tr>
+                  <tr><td>Perplexity</td><td class="mono-value">3.21</td><td><span class="rating-badge excellent">Excellent</span></td></tr>
+                  <tr><td>Response Coherence</td><td class="mono-value">0.847</td><td><span class="rating-badge excellent">Excellent</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card table-card">
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <h3 class="table-title"><i data-lucide="candlestick-chart"></i> Market Prediction Accuracy</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr><th>Asset</th><th>Direction</th><th>Price Accuracy</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Bitcoin (BTC)</td><td class="mono-value">94.7%</td><td class="mono-value">98.6%</td><td><span class="status-live"><span class="live-dot"></span>Live</span></td></tr>
+                  <tr><td>Ethereum (ETH)</td><td class="mono-value">91.2%</td><td class="mono-value">96.4%</td><td><span class="status-live"><span class="live-dot"></span>Live</span></td></tr>
+                  <tr><td>Solana (SOL)</td><td class="mono-value">89.8%</td><td class="mono-value">94.1%</td><td><span class="status-beta">Beta</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Results -->
+      <div class="live-results">
+        <h3 class="section-title"><span class="live-dot"></span> Live Results</h3>
+        <div class="results-row">
+          <div class="result-metric glass-card">
+            <div class="card-border-gradient"></div>
+            <div class="metric-label">Posts Processed</div>
+            <div class="metric-value">
+              <span class="mono-value count-up" data-value="150">0</span><span class="metric-total">/150</span>
+            </div>
+            <div class="metric-bar"><div class="metric-bar-fill" data-width="100"></div></div>
+          </div>
+          <div class="result-metric glass-card">
+            <div class="card-border-gradient"></div>
+            <div class="metric-label">Price Predictions</div>
+            <div class="metric-value"><span class="mono-value count-up" data-value="98.6" data-suffix="%">0%</span></div>
+            <div class="metric-bar"><div class="metric-bar-fill green" data-width="98.6"></div></div>
+          </div>
+          <div class="result-metric glass-card">
+            <div class="card-border-gradient"></div>
+            <div class="metric-label">Logic Scores</div>
+            <div class="metric-value"><span class="mono-value count-up" data-value="80.9" data-suffix="%">0%</span></div>
+            <div class="metric-bar"><div class="metric-bar-fill purple" data-width="80.9"></div></div>
+          </div>
+          <div class="result-metric glass-card">
+            <div class="card-border-gradient"></div>
+            <div class="metric-label">Direction Accuracy</div>
+            <div class="metric-value"><span class="mono-value count-up" data-value="94.7" data-suffix="%">0%</span></div>
+            <div class="metric-bar"><div class="metric-bar-fill cyan" data-width="94.7"></div></div>
+          </div>
+          <div class="result-metric glass-card">
+            <div class="card-border-gradient"></div>
+            <div class="metric-label">Processing Speed</div>
+            <div class="metric-value"><span class="mono-value">&lt;1s</span></div>
+            <div class="metric-bar"><div class="metric-bar-fill green" data-width="95"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== MATH ACCURACY PAGE =================== -->
+    <section id="page-math-accuracy" class="page">
+      <div class="page-header">
+        <div class="page-header-content">
+          <div class="page-badge">
+            <i data-lucide="calculator"></i>
+            <span>Raven AI</span>
+          </div>
+          <h1 class="page-title">Mathematical Accuracy</h1>
+          <p class="page-subtitle">Precision metrics across all prediction models.</p>
+        </div>
+      </div>
+
+      <!-- Model Filters -->
+      <div class="model-filters">
+        <button class="model-btn active" data-model="kryos">Kryos</button>
+        <button class="model-btn" data-model="helion">Helion</button>
+        <button class="model-btn" data-model="astrax">Astrax</button>
+        <button class="model-btn" data-model="temporal">Temporal</button>
+      </div>
+
+      <!-- Metric Tabs -->
+      <div class="tabs-container metric-tabs-container">
+        <div class="tabs metric-tabs">
+          <button class="tab active" data-metric-tab="pdds">PDDS Score</button>
+          <button class="tab" data-metric-tab="directional">Directional Accuracy</button>
+          <button class="tab" data-metric-tab="price">Price Accuracy</button>
+          <div class="tab-indicator metric-tab-indicator"></div>
+        </div>
+      </div>
+
+      <!-- Chart Area -->
+      <div class="glass-card chart-card" data-tilt>
+        <div class="card-border-gradient"></div>
+        <div class="card-content">
+          <div class="chart-header">
+            <h3 class="chart-title" id="chart-title">PDDS Score by Asset</h3>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot cyan"></span>Current</span>
+              <span class="legend-item"><span class="legend-dot purple"></span>Previous</span>
+            </div>
+          </div>
+          <div class="chart-area" id="chart-area">
+            <!-- Animated bars injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Score Summary Cards -->
+      <div class="cards-grid math-summary-grid">
+        <div class="glass-card summary-card" data-tilt>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="summary-ring" data-percent="92">
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" class="ring-bg"/>
+                <circle cx="60" cy="60" r="52" class="ring-fill cyan" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+              </svg>
+              <span class="ring-value count-up" data-value="92" data-suffix="%">0%</span>
+            </div>
+            <h4>Overall PDDS</h4>
+            <p class="text-muted">Prediction Direction & Distance Score</p>
+          </div>
+        </div>
+
+        <div class="glass-card summary-card" data-tilt>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="summary-ring" data-percent="95">
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" class="ring-bg"/>
+                <circle cx="60" cy="60" r="52" class="ring-fill green" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+              </svg>
+              <span class="ring-value count-up" data-value="95" data-suffix="%">0%</span>
+            </div>
+            <h4>Directional Acc.</h4>
+            <p class="text-muted">Correct direction prediction rate</p>
+          </div>
+        </div>
+
+        <div class="glass-card summary-card" data-tilt>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="summary-ring" data-percent="97">
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" class="ring-bg"/>
+                <circle cx="60" cy="60" r="52" class="ring-fill purple" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+              </svg>
+              <span class="ring-value count-up" data-value="97" data-suffix="%">0%</span>
+            </div>
+            <h4>Price Accuracy</h4>
+            <p class="text-muted">Deviation within acceptable range</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== POINTS PAGE =================== -->
+    <section id="page-points" class="page">
+      <div class="points-empty-state">
+        <div class="points-visual">
+          <div class="floating-reward r1"><i data-lucide="star"></i></div>
+          <div class="floating-reward r2"><i data-lucide="gem"></i></div>
+          <div class="floating-reward r3"><i data-lucide="trophy"></i></div>
+          <div class="floating-reward r4"><i data-lucide="coins"></i></div>
+          <div class="floating-reward r5"><i data-lucide="gift"></i></div>
+          <div class="points-orb"></div>
+        </div>
+        <h1 class="page-title">Connect to View Points</h1>
+        <p class="page-subtitle points-subtitle">Please connect your wallet and login with Twitter to view your points and rewards.</p>
+        <div class="points-actions">
+          <button class="btn-primary btn-large">
+            <i data-lucide="wallet"></i>
+            <span>Connect Wallet</span>
+          </button>
+          <button class="btn-secondary btn-large">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
+            <span>Login with X</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /page-container -->
+
+  <!-- Footer Attribution -->
+  <footer id="app-footer">
+    <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+  </footer>
+
+</main>
+
+<script src="app.js" type="module"></script>
 </body>
 </html>
