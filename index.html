@@ -185,14 +185,72 @@
 
     <!-- =================== CRYPTO PAGE =================== -->
     <section id="page-crypto" class="page active">
-      <div class="page-header">
-        <div class="page-header-content">
-          <div class="page-badge">
-            <svg class="raven-icon-sm" viewBox="0 0 40 40" fill="none"><path d="M20 4L8 14L12 18L8 28L14 24L18 36L22 24L28 28L32 18L36 14L24 4L22 10L20 4Z" fill="url(#logo-gradient-sm)" stroke="rgba(0,229,255,0.3)" stroke-width="0.5"/><circle cx="17" cy="16" r="1.5" fill="#00E5FF"/><defs><linearGradient id="logo-gradient-sm" x1="8" y1="4" x2="36" y2="36"><stop offset="0%" stop-color="#00E5FF" stop-opacity="0.8"/><stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.5"/></linearGradient></defs></svg>
-            <span>Raven AI</span>
+
+      <!-- LIVE TICKER -->
+      <div class="ticker" aria-label="Live market ticker">
+        <div class="ticker-track" id="ticker-track"></div>
+      </div>
+
+      <!-- HERO -->
+      <div class="hero">
+        <canvas id="hero-canvas" class="hero-canvas" aria-hidden="true"></canvas>
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+          <div class="page-badge hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span>Raven AI · Live Predictions</span>
           </div>
-          <h1 class="page-title">Crypto Market Predictions</h1>
-          <p class="page-subtitle">I predict what the market hasn't priced yet.</p>
+          <h1 class="hero-title">
+            <span class="hero-line">Predict what the</span>
+            <span class="hero-line gradient-text">market hasn't priced.</span>
+          </h1>
+          <p class="hero-subtitle">A reasoning model fine-tuned on 150M+ data points across crypto, prediction markets and on-chain signals — delivering institutional-grade calls in under a second.</p>
+          <div class="hero-cta-row">
+            <a href="#ask" class="btn-primary btn-large hero-cta">
+              <i data-lucide="sparkles"></i>
+              <span>Ask Raven</span>
+            </a>
+            <a href="#score" class="btn-ghost btn-large">
+              <span>See benchmarks</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS STRIP -->
+      <div class="stats-strip" data-reveal>
+        <div class="stat">
+          <div class="stat-value"><span class="count-up" data-value="98.6" data-suffix="%">0%</span></div>
+          <div class="stat-label">Price Accuracy</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value"><span class="count-up" data-value="94.7" data-suffix="%">0%</span></div>
+          <div class="stat-label">Directional</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value"><span class="count-up" data-value="150" data-suffix="M+">0</span></div>
+          <div class="stat-label">Signals Analyzed</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value"><span class="count-up" data-value="0.8" data-suffix="s" data-decimals="1">0s</span></div>
+          <div class="stat-label">Inference</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value"><span class="status-live"><span class="live-dot"></span>Live</span></div>
+          <div class="stat-label">24/7 Streaming</div>
+        </div>
+      </div>
+
+      <div class="page-header section-spacer" data-reveal>
+        <div class="page-header-content">
+          <div class="section-eyebrow">Examples</div>
+          <h2 class="section-title-lg">Try a question</h2>
+          <p class="page-subtitle">Tap any prompt or write your own — Raven returns a reasoned, sourced answer.</p>
         </div>
       </div>
 
@@ -208,100 +266,163 @@
       </div>
 
       <!-- Question Cards Grid -->
-      <div class="cards-grid crypto-grid">
-        <div class="glass-card question-card" data-tilt>
+      <div class="cards-grid crypto-grid" data-reveal-children>
+        <button class="glass-card question-card category-purple" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
             <div class="card-icon-wrap"><i data-lucide="message-circle"></i></div>
-            <p class="card-question">Tell me the sentiment around ETH?</p>
+            <p class="card-question">What's the current sentiment around ETH?</p>
             <div class="card-meta">
-              <span class="card-tag">Sentiment</span>
-              <span class="card-tag">ETH</span>
+              <span class="card-tag tag-purple">Sentiment</span>
+              <span class="card-tag tag-mono">ETH</span>
             </div>
+            <span class="card-cta"><i data-lucide="arrow-up-right"></i></span>
           </div>
-        </div>
+        </button>
 
-        <div class="glass-card question-card" data-tilt>
+        <button class="glass-card question-card category-cyan" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
             <div class="card-icon-wrap"><i data-lucide="clock"></i></div>
-            <p class="card-question">What be the price of BTC after 4 hours?</p>
+            <p class="card-question">What will be the price of BTC after 4 hours?</p>
             <div class="card-meta">
-              <span class="card-tag">Price</span>
-              <span class="card-tag">BTC</span>
-              <span class="card-tag">4H</span>
+              <span class="card-tag tag-cyan">Price</span>
+              <span class="card-tag tag-mono">BTC</span>
+              <span class="card-tag tag-muted">4H</span>
             </div>
+            <span class="card-cta"><i data-lucide="arrow-up-right"></i></span>
           </div>
-        </div>
+        </button>
 
-        <div class="glass-card question-card" data-tilt>
+        <button class="glass-card question-card category-orange" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
             <div class="card-icon-wrap"><i data-lucide="trending-down"></i></div>
-            <p class="card-question">What's the primarily reason of Bitcoin falling recently?</p>
+            <p class="card-question">What's the primary reason for Bitcoin's recent decline?</p>
             <div class="card-meta">
-              <span class="card-tag">Analysis</span>
-              <span class="card-tag">BTC</span>
+              <span class="card-tag tag-orange">Analysis</span>
+              <span class="card-tag tag-mono">BTC</span>
             </div>
+            <span class="card-cta"><i data-lucide="arrow-up-right"></i></span>
           </div>
-        </div>
+        </button>
 
-        <div class="glass-card question-card" data-tilt>
+        <button class="glass-card question-card category-cyan" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
             <div class="card-icon-wrap"><i data-lucide="line-chart"></i></div>
-            <p class="card-question">What be the price of ETH after 4 hours?</p>
+            <p class="card-question">What will be the price of ETH after 4 hours?</p>
             <div class="card-meta">
-              <span class="card-tag">Price</span>
-              <span class="card-tag">ETH</span>
-              <span class="card-tag">4H</span>
+              <span class="card-tag tag-cyan">Price</span>
+              <span class="card-tag tag-mono">ETH</span>
+              <span class="card-tag tag-muted">4H</span>
             </div>
+            <span class="card-cta"><i data-lucide="arrow-up-right"></i></span>
           </div>
-        </div>
+        </button>
 
-        <div class="glass-card question-card" data-tilt>
+        <button class="glass-card question-card category-green" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
             <div class="card-icon-wrap"><i data-lucide="help-circle"></i></div>
-            <p class="card-question">Should I invest in Bitcoin now?</p>
+            <p class="card-question">Should I increase exposure to Bitcoin right now?</p>
             <div class="card-meta">
-              <span class="card-tag">Advice</span>
-              <span class="card-tag">BTC</span>
+              <span class="card-tag tag-green">Advice</span>
+              <span class="card-tag tag-mono">BTC</span>
             </div>
+            <span class="card-cta"><i data-lucide="arrow-up-right"></i></span>
           </div>
+        </button>
+
+        <button class="glass-card question-card category-pink" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="card-icon-wrap"><i data-lucide="activity"></i></div>
+            <p class="card-question">Which alt is showing the strongest on-chain momentum?</p>
+            <div class="card-meta">
+              <span class="card-tag tag-pink">On-chain</span>
+              <span class="card-tag tag-muted">Momentum</span>
+            </div>
+            <span class="card-cta"><i data-lucide="arrow-up-right"></i></span>
+          </div>
+        </button>
+      </div>
+
+      <!-- =================== FEATURE SPOTLIGHT =================== -->
+      <div class="features-section" data-reveal>
+        <div class="section-head">
+          <div class="section-eyebrow">Capabilities</div>
+          <h2 class="section-title-lg">Built for traders who refuse to be late.</h2>
+        </div>
+        <div class="features-grid">
+          <article class="glass-card feature-card" data-tilt>
+            <div class="card-border-gradient"></div>
+            <div class="card-content">
+              <div class="feature-icon cyan"><i data-lucide="cpu"></i></div>
+              <h3 class="feature-title">Reasoning, not regression.</h3>
+              <p class="feature-desc">Sota-Gpt-oss-20b with AdaLoRA fine-tuning weighs evidence step-by-step before issuing a call.</p>
+              <div class="feature-stat"><span class="mono-value">98.6%</span><span class="feature-stat-label">price accuracy</span></div>
+            </div>
+          </article>
+          <article class="glass-card feature-card" data-tilt>
+            <div class="card-border-gradient"></div>
+            <div class="card-content">
+              <div class="feature-icon purple"><i data-lucide="radio"></i></div>
+              <h3 class="feature-title">On-chain & social fused.</h3>
+              <p class="feature-desc">LunarCrush sentiment, Polymarket odds, exchange flows and whale wallets — distilled into one signal.</p>
+              <div class="feature-stat"><span class="mono-value">12+</span><span class="feature-stat-label">live data sources</span></div>
+            </div>
+          </article>
+          <article class="glass-card feature-card" data-tilt>
+            <div class="card-border-gradient"></div>
+            <div class="card-content">
+              <div class="feature-icon green"><i data-lucide="zap"></i></div>
+              <h3 class="feature-title">Sub-second answers.</h3>
+              <p class="feature-desc">GPU-optimized inference with OpenAI-compatible streaming. Plug into any agent or terminal.</p>
+              <div class="feature-stat"><span class="mono-value">&lt;1s</span><span class="feature-stat-label">end-to-end latency</span></div>
+            </div>
+          </article>
         </div>
       </div>
 
       <!-- Upgrade Banner -->
-      <div class="upgrade-banner glass-card">
-        <div class="card-border-gradient"></div>
+      <div class="upgrade-banner upgrade-banner-v2" data-reveal>
+        <div class="upgrade-bg-glow"></div>
         <div class="banner-content">
-          <div class="banner-icon"><i data-lucide="lock"></i></div>
-          <div class="banner-text">
-            <h3>Unlock more with paid plans</h3>
-            <p>Get unlimited predictions, priority processing, and advanced analytics.</p>
+          <div class="banner-icon-v2">
+            <i data-lucide="sparkles"></i>
           </div>
-          <button class="btn-primary">Upgrade Now</button>
+          <div class="banner-text">
+            <h3>Unlock institutional-grade signals</h3>
+            <p>Unlimited predictions · Priority inference · Portfolio integration · API access</p>
+          </div>
+          <div class="banner-ctas">
+            <button class="btn-primary">Upgrade Now</button>
+            <button class="btn-ghost-sm">Learn more <i data-lucide="arrow-right"></i></button>
+          </div>
         </div>
       </div>
 
       <!-- Input Area -->
-      <div class="input-area">
-        <div class="input-wrapper">
-          <i data-lucide="sparkles" class="input-icon"></i>
-          <input type="text" placeholder="Ask me anything about the crypto market..." class="main-input" id="crypto-input">
+      <div class="input-area" id="ask">
+        <div class="input-wrapper-v2">
+          <div class="input-inner">
+            <i data-lucide="sparkles" class="input-icon"></i>
+            <input type="text" placeholder="Ask me anything about the crypto market…" class="main-input" id="crypto-input">
+          </div>
           <button class="ask-raven-btn" id="ask-raven-btn">
+            <i data-lucide="send"></i>
             <span>Ask Raven</span>
-            <i data-lucide="arrow-right"></i>
           </button>
         </div>
         <div class="filter-pills">
-          <button class="pill active">Crypto</button>
+          <button class="pill active"><i data-lucide="bitcoin"></i>Crypto</button>
           <button class="pill">Timeframe</button>
           <button class="pill">Analysis</button>
           <button class="pill">Assets</button>
@@ -312,52 +433,64 @@
 
     <!-- =================== POLYMARKET PAGE =================== -->
     <section id="page-polymarket" class="page">
-      <div class="page-header">
+
+      <!-- LIVE TICKER -->
+      <div class="ticker" aria-label="Live market ticker">
+        <div class="ticker-track" id="ticker-track-poly"></div>
+      </div>
+
+      <div class="page-header section-spacer" data-reveal>
         <div class="page-header-content">
           <div class="page-badge">
-            <svg class="raven-icon-sm" viewBox="0 0 40 40" fill="none"><path d="M20 4L8 14L12 18L8 28L14 24L18 36L22 24L28 28L32 18L36 14L24 4L22 10L20 4Z" fill="url(#logo-gradient-sm)" stroke="rgba(0,229,255,0.3)" stroke-width="0.5"/><circle cx="17" cy="16" r="1.5" fill="#00E5FF"/></svg>
-            <span>Raven AI</span>
+            <span class="hero-badge-dot"></span>
+            <span>Raven AI · Prediction Markets</span>
           </div>
-          <h1 class="page-title">Polymarket Predictions</h1>
-          <p class="page-subtitle">I predict what the market hasn't priced yet.</p>
+          <h1 class="hero-title-sm gradient-text">Polymarket Predictions</h1>
+          <p class="page-subtitle">AI-calibrated probability on 12 live prediction markets.</p>
+        </div>
+        <div class="page-header-stats">
+          <div class="header-stat"><span class="mono-value accent-cyan">12</span><span>Live Markets</span></div>
+          <div class="header-stat"><span class="mono-value accent-green">$2.4B+</span><span>Total Volume</span></div>
+          <div class="header-stat"><span class="mono-value accent-purple">Daily</span><span>Updates</span></div>
         </div>
       </div>
 
-      <div class="cards-grid polymarket-grid" id="polymarket-grid">
+      <div class="cards-grid polymarket-grid" id="polymarket-grid" data-reveal-children>
         <!-- Cards injected by JS -->
       </div>
 
       <!-- Input Area -->
       <div class="input-area">
-        <div class="input-wrapper">
-          <i data-lucide="sparkles" class="input-icon"></i>
-          <input type="text" placeholder="Ask about any prediction market..." class="main-input">
+        <div class="input-wrapper-v2">
+          <div class="input-inner">
+            <i data-lucide="sparkles" class="input-icon"></i>
+            <input type="text" placeholder="Ask about any prediction market…" class="main-input">
+          </div>
           <button class="ask-raven-btn">
+            <i data-lucide="send"></i>
             <span>Ask Raven</span>
-            <i data-lucide="arrow-right"></i>
           </button>
         </div>
         <div class="filter-pills">
-          <button class="pill active">Polymarket</button>
-          <button class="pill">Liquidity</button>
-          <button class="pill">Volume</button>
-          <button class="pill">Timeframe</button>
-          <button class="pill">Newest</button>
+          <button class="pill active">All Markets</button>
+          <button class="pill">High Volume</button>
           <button class="pill">Ending Soon</button>
-          <button class="pill">Score</button>
+          <button class="pill">Geopolitics</button>
+          <button class="pill">Sports</button>
+          <button class="pill">Politics</button>
         </div>
       </div>
     </section>
 
     <!-- =================== SCORE PAGE =================== -->
     <section id="page-score" class="page">
-      <div class="page-header">
+      <div class="page-header section-spacer" data-reveal>
         <div class="page-header-content">
-          <div class="page-badge score-badge">
-            <span>🏆</span>
-            <span>Raven AI</span>
+          <div class="page-badge">
+            <span class="hero-badge-dot" style="background:var(--accent-green)"></span>
+            <span>Benchmark · FT Reasoning Model</span>
           </div>
-          <h1 class="page-title">FT Reasoning Model</h1>
+          <h1 class="hero-title-sm gradient-text">Academic-grade accuracy.<br>Real-time speed.</h1>
           <p class="page-subtitle">Sota-Gpt-oss-20b with Adaptive LoRA (AdaLoRA) fine-tuning — GPU-optimized for real-time crypto market analysis and prediction.</p>
         </div>
       </div>
@@ -515,14 +648,14 @@
 
     <!-- =================== MATH ACCURACY PAGE =================== -->
     <section id="page-math-accuracy" class="page">
-      <div class="page-header">
+      <div class="page-header section-spacer" data-reveal>
         <div class="page-header-content">
           <div class="page-badge">
-            <i data-lucide="calculator"></i>
-            <span>Raven AI</span>
+            <span class="hero-badge-dot" style="background:var(--accent-purple)"></span>
+            <span>Benchmark · Mathematical Accuracy</span>
           </div>
-          <h1 class="page-title">Mathematical Accuracy</h1>
-          <p class="page-subtitle">Precision metrics across all prediction models.</p>
+          <h1 class="hero-title-sm gradient-text gradient-purple">Numbers don't lie.</h1>
+          <p class="page-subtitle">Precision metrics across all prediction models — PDDS, directional accuracy, and price deviation.</p>
         </div>
       </div>
 
@@ -614,6 +747,7 @@
     <section id="page-points" class="page">
       <div class="points-empty-state">
         <div class="points-visual">
+          <canvas id="points-canvas" class="points-canvas" aria-hidden="true"></canvas>
           <div class="floating-reward r1"><i data-lucide="star"></i></div>
           <div class="floating-reward r2"><i data-lucide="gem"></i></div>
           <div class="floating-reward r3"><i data-lucide="trophy"></i></div>
@@ -621,8 +755,17 @@
           <div class="floating-reward r5"><i data-lucide="gift"></i></div>
           <div class="points-orb"></div>
         </div>
-        <h1 class="page-title">Connect to View Points</h1>
-        <p class="page-subtitle points-subtitle">Please connect your wallet and login with Twitter to view your points and rewards.</p>
+        <div class="page-badge" style="margin-bottom:1rem">
+          <span class="hero-badge-dot" style="background:var(--accent-orange)"></span>
+          <span>Rewards Program</span>
+        </div>
+        <h1 class="hero-title-sm gradient-text gradient-orange" style="text-align:center">Earn while you predict.</h1>
+        <p class="page-subtitle points-subtitle">Connect your wallet and link your X account to start accumulating Raven Points on every correct call.</p>
+        <div class="points-tiers">
+          <div class="tier-badge tier-bronze"><i data-lucide="award"></i> Bronze</div>
+          <div class="tier-badge tier-silver"><i data-lucide="award"></i> Silver</div>
+          <div class="tier-badge tier-gold"><i data-lucide="award"></i> Gold</div>
+        </div>
         <div class="points-actions">
           <button class="btn-primary btn-large">
             <i data-lucide="wallet"></i>
@@ -638,9 +781,35 @@
 
   </div><!-- /page-container -->
 
-  <!-- Footer Attribution -->
-  <footer id="app-footer">
-    <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+  <!-- Premium Footer -->
+  <footer id="app-footer" class="footer-v2">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg class="raven-logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4L8 14L12 18L8 28L14 24L18 36L22 24L28 28L32 18L36 14L24 4L22 10L20 4Z" fill="url(#footer-logo-grad)" stroke="rgba(0,229,255,0.3)" stroke-width="0.5"/>
+          <path d="M20 4L18 12L20 8L22 12L20 4Z" fill="#00E5FF" opacity="0.9"/>
+          <circle cx="17" cy="16" r="1.5" fill="#00E5FF"/>
+          <defs>
+            <linearGradient id="footer-logo-grad" x1="8" y1="4" x2="36" y2="36">
+              <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.5"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">Raven<span class="logo-text-ai">AI</span></span>
+      </div>
+      <p class="footer-tagline">The reasoning model that predicts what markets haven't priced yet.</p>
+      <div class="footer-links">
+        <a href="#crypto">Crypto</a>
+        <a href="#polymarket">Polymarket</a>
+        <a href="#score">Benchmarks</a>
+        <a href="#points">Points</a>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Raven AI</span>
+        <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Built with Perplexity Computer</a>
+      </div>
+    </div>
   </footer>
 
 </main>
