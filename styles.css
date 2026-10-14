@@ -1977,6 +1977,8 @@ body::after {
   position: relative;
 }
 
+.ticker[hidden] { display: none; }
+
 .ticker::before,
 .ticker::after {
   content: '';
@@ -2229,6 +2231,7 @@ body::after {
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.6px;
+  text-align: center;
 }
 
 .stat-divider {
@@ -2381,6 +2384,7 @@ body::after {
 
 .feature-stat {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 6px;
   padding-top: var(--space-3);
@@ -2652,10 +2656,10 @@ body::after {
   .hero { padding: var(--space-10) var(--space-4) var(--space-8); min-height: 400px; }
   .hero-title { font-size: 32px; }
   .hero-title-sm { font-size: 26px; }
-  .stats-strip { display: grid; grid-template-columns: 1fr 1fr; border-radius: var(--radius-lg); }
+  .stats-strip { display: grid; grid-template-columns: 1fr; border-radius: var(--radius-lg); }
   .stat-divider { display: none; }
   .stat { border-bottom: 1px solid rgba(255,255,255,0.04); }
-  .stat:nth-child(9), .stat:nth-child(10) { border-bottom: none; }
+  .stat:last-child { border-bottom: none; }
   .features-grid { grid-template-columns: 1fr; }
   .banner-content { flex-direction: column; text-align: center; align-items: center; }
   .banner-ctas { flex-direction: column; width: 100%; }
@@ -2701,4 +2705,53 @@ body::after {
   height: 13px;
   vertical-align: middle;
   margin-right: 2px;
+}
+
+/* ----------------------------------------------------------------
+   HOW WE MEASURE — method cards
+   ---------------------------------------------------------------- */
+.measure-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.measure-card .card-content {
+  align-items: flex-start;
+  text-align: left;
+  gap: var(--space-4);
+}
+
+.measure-card .achievement-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.measure-card .achievement-desc {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .measure-grid { grid-template-columns: 1fr; }
+}
+
+/* ----------------------------------------------------------------
+   POLYMARKET — example questions
+   ---------------------------------------------------------------- */
+.group-label {
+  margin-bottom: var(--space-4);
+}
+
+.page-subtitle a {
+  color: var(--accent-cyan);
+}
+
+.prediction-card .card-content {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.prediction-card .prediction-footer {
+  margin-top: auto;
+  justify-content: flex-end;
 }

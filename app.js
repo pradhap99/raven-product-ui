@@ -6,42 +6,23 @@
 // ----------------------------------------------------------------
 // POLYMARKET DATA
 // ----------------------------------------------------------------
-const polymarketData = [
-  { title: "Russia x Ukraine ceasefire by March 31, 2026?", yes: 2, no: 98, volume: "$25m", freq: "Daily" },
-  { title: "English Premier League Winner", yes: 0, no: 100, volume: "$341m", freq: "Weekly" },
-  { title: "Democratic Presidential Nominee 2028", yes: 1, no: 99, volume: "$823m", freq: "Daily" },
-  { title: "Russia x Ukraine ceasefire by end of 2026?", yes: 38, no: 63, volume: "$12m", freq: "Weekly" },
-  { title: "GTA VI released before June 2026?", yes: 3, no: 97, volume: "$11m", freq: "Monthly" },
-  { title: "Will China invade Taiwan by end of 2026?", yes: 10, no: 90, volume: "$11m", freq: "Monthly" },
-  { title: "The Masters - Winner", yes: 5, no: 95, volume: "$42m", freq: "Weekly" },
-  { title: "Xi Jinping out before 2027?", yes: 9, no: 91, volume: "$7m", freq: "Monthly" },
-  { title: "Republican Presidential Nominee 2028", yes: 2, no: 98, volume: "$409m", freq: "Daily" },
-  { title: "2026 FIFA World Cup Winner", yes: 15, no: 85, volume: "$298m", freq: "Weekly" },
-  { title: "Presidential Election Winner 2028", yes: 1, no: 99, volume: "$402m", freq: "Daily" },
-  { title: "Next Prime Minister of Hungary", yes: 36, no: 65, volume: "$31m", freq: "Monthly" }
+// Example questions only, all with deadlines after 2026-10-14. Live odds live at raven-agent.com/polymarket.
+// Re-check the deadlines whenever this list is touched: a question that has closed should be swapped out.
+const POLYMARKET_URL = 'https://www.raven-agent.com/polymarket';
+const polymarketQuestions = [
+  "Which party will win the House in 2026?",
+  "Which party will win the Senate in 2026?",
+  "How many Fed rate cuts in 2026?",
+  "What price will Bitcoin hit in 2026?",
+  "What price will Ethereum hit in 2026?",
+  "Democratic Presidential Nominee 2028",
+  "Republican Presidential Nominee 2028",
+  "Presidential Election Winner 2028",
+  "Russia x Ukraine ceasefire by end of 2026?",
+  "Will China invade Taiwan by end of 2026?",
+  "Xi Jinping out before 2027?",
+  "English Premier League: 2027 Champion"
 ];
-
-// CHART DATA
-const chartData = {
-  pdds: {
-    title: "PDDS Score by Asset",
-    labels: ["BTC", "ETH", "SOL", "AVAX", "MATIC", "DOT"],
-    current: [94, 91, 87, 83, 79, 76],
-    previous: [89, 86, 81, 78, 73, 70]
-  },
-  directional: {
-    title: "Directional Accuracy by Asset",
-    labels: ["BTC", "ETH", "SOL", "AVAX", "MATIC", "DOT"],
-    current: [95, 92, 89, 85, 82, 78],
-    previous: [90, 87, 83, 79, 76, 72]
-  },
-  price: {
-    title: "Price Accuracy by Asset",
-    labels: ["BTC", "ETH", "SOL", "AVAX", "MATIC", "DOT"],
-    current: [99, 96, 93, 90, 87, 84],
-    previous: [94, 91, 88, 85, 82, 79]
-  }
-};
 
 // ----------------------------------------------------------------
 // INIT
@@ -50,24 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Lucide icons
   if (window.lucide) lucide.createIcons();
 
-  // Build dynamic content
-  buildChartBars('pdds');
-
   // Initialize routing
   initRouter();
 
   // Initialize tabs
   initTabs();
-  initMetricTabs();
-  initModelFilters();
 
   // Initialize interactions
   initTiltEffect();
   initNavIndicator();
   initMobileMenu();
-  initCountUpObserver();
-  initMetricBars();
-  initRings();
   initMouseSpotlight();
 
   // Initialize GSAP
@@ -161,7 +134,7 @@ function animatePageContent(pageId) {
   if (!page) return;
 
   // Stagger children animation
-  const children = page.querySelectorAll('.page-header, .tabs-container, .glass-card, .model-filters, .metric-tabs-container, .live-results, .input-area, .upgrade-banner, .points-empty-state');
+  const children = page.querySelectorAll('.page-header, .tabs-container, .glass-card, .input-area, .upgrade-banner, .points-empty-state');
 
   gsap.fromTo(children, {
     opacity: 0,
@@ -176,27 +149,6 @@ function animatePageContent(pageId) {
     ease: "power3.out",
     delay: 0.1
   });
-
-  // Animate bars if on relevant pages
-  if (pageId === 'score') {
-    setTimeout(() => {
-      animateMetricBars();
-      animateCountUps(page);
-      animateRings(page);
-    }, 300);
-  }
-
-  if (pageId === 'math-accuracy') {
-    setTimeout(() => {
-      animateChartBars();
-      animateCountUps(page);
-      animateRings(page);
-    }, 300);
-  }
-
-  if (pageId === 'polymarket') {
-    setTimeout(() => animatePredictionBars(), 300);
-  }
 
   // Reinit lucide for any new elements
   if (window.lucide) lucide.createIcons();
@@ -237,62 +189,6 @@ function initTabs() {
   if (activeTab) {
     requestAnimationFrame(() => updateIndicator(activeTab));
   }
-}
-
-function initMetricTabs() {
-  const tabsContainer = document.querySelector('.metric-tabs');
-  if (!tabsContainer) return;
-
-  const tabs = tabsContainer.querySelectorAll('.tab');
-  const indicator = tabsContainer.querySelector('.metric-tab-indicator');
-
-  function updateIndicator(activeTab) {
-    const rect = activeTab.getBoundingClientRect();
-    const containerRect = tabsContainer.getBoundingClientRect();
-    gsap.to(indicator, {
-      left: rect.left - containerRect.left,
-      width: rect.width,
-      duration: 0.4,
-      ease: "back.out(1.4)"
-    });
-  }
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const metricKey = tab.dataset.metricTab;
-      buildChartBars(metricKey);
-      setTimeout(animateChartBars, 50);
-      document.getElementById('chart-title').textContent = chartData[metricKey].title;
-      updateIndicator(tab);
-    });
-  });
-
-  const activeTab = tabsContainer.querySelector('.tab.active');
-  if (activeTab) {
-    requestAnimationFrame(() => updateIndicator(activeTab));
-  }
-}
-
-function initModelFilters() {
-  const btns = document.querySelectorAll('.model-btn');
-  btns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      btns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      // Re-animate chart
-      gsap.to('.chart-bar', {
-        height: 0,
-        duration: 0.2,
-        ease: "power2.in",
-        onComplete: () => {
-          setTimeout(animateChartBars, 100);
-        }
-      });
-    });
-  });
 }
 
 // ----------------------------------------------------------------
@@ -343,92 +239,6 @@ function initMobileMenu() {
 }
 
 // ----------------------------------------------------------------
-// POLYMARKET CARDS
-// ----------------------------------------------------------------
-function buildPolymarketCards() {
-  const grid = document.getElementById('polymarket-grid');
-  if (!grid) return;
-
-  grid.innerHTML = polymarketData.map((item, i) => `
-    <div class="glass-card prediction-card" data-tilt>
-      <div class="card-glow"></div>
-      <div class="card-border-gradient"></div>
-      <div class="card-content">
-        <p class="prediction-title">${item.title}</p>
-        <div class="prediction-bars">
-          <div class="pred-bar-row">
-            <span class="pred-label yes">Yes</span>
-            <div class="pred-bar-track"><div class="pred-bar-fill yes" data-width="${item.yes}"></div></div>
-            <span class="pred-percent yes">${item.yes}%</span>
-          </div>
-          <div class="pred-bar-row">
-            <span class="pred-label no">No</span>
-            <div class="pred-bar-track"><div class="pred-bar-fill no" data-width="${item.no}"></div></div>
-            <span class="pred-percent no">${item.no}%</span>
-          </div>
-        </div>
-        <div class="prediction-footer">
-          <span class="pred-volume">${item.volume} <span>Vol.</span></span>
-          <button class="ask-raven-small">
-            <i data-lucide="sparkles"></i>
-            Ask Raven
-          </button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  if (window.lucide) lucide.createIcons();
-}
-
-function animatePredictionBars() {
-  document.querySelectorAll('#page-polymarket .pred-bar-fill').forEach(bar => {
-    const width = bar.dataset.width;
-    gsap.fromTo(bar, { width: '0%' }, {
-      width: width + '%',
-      duration: 0.8,
-      ease: "back.out(1.2)",
-      delay: 0.1
-    });
-  });
-}
-
-// ----------------------------------------------------------------
-// CHART BARS
-// ----------------------------------------------------------------
-function buildChartBars(metricKey) {
-  const area = document.getElementById('chart-area');
-  if (!area) return;
-  const data = chartData[metricKey];
-
-  area.innerHTML = data.labels.map((label, i) => `
-    <div class="chart-bar-group">
-      <div class="chart-bars">
-        <div class="chart-bar current" style="height: 0%" data-height="${data.current[i]}">
-          <span class="chart-bar-value">${data.current[i]}%</span>
-        </div>
-        <div class="chart-bar previous" style="height: 0%" data-height="${data.previous[i]}">
-          <span class="chart-bar-value">${data.previous[i]}%</span>
-        </div>
-      </div>
-      <span class="chart-bar-label">${label}</span>
-    </div>
-  `).join('');
-}
-
-function animateChartBars() {
-  document.querySelectorAll('#chart-area .chart-bar').forEach((bar, i) => {
-    const height = bar.dataset.height;
-    gsap.fromTo(bar, { height: '0%' }, {
-      height: height + '%',
-      duration: 0.7,
-      ease: "back.out(1.3)",
-      delay: i * 0.06
-    });
-  });
-}
-
-// ----------------------------------------------------------------
 // 3D TILT EFFECT
 // ----------------------------------------------------------------
 function initTiltEffect() {
@@ -455,90 +265,6 @@ function initTiltEffect() {
         duration: 0.3,
         ease: "power2.out"
       });
-    });
-  });
-}
-
-// ----------------------------------------------------------------
-// COUNT-UP ANIMATIONS
-// ----------------------------------------------------------------
-function initCountUpObserver() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCountUps(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  document.querySelectorAll('.page').forEach(page => {
-    observer.observe(page);
-  });
-}
-
-function animateCountUps(container) {
-  const elements = container.querySelectorAll('.count-up');
-  elements.forEach(el => {
-    const target = parseFloat(el.dataset.value);
-    const suffix = el.dataset.suffix || '';
-    const decimals = parseInt(el.dataset.decimals) || (target % 1 !== 0 ? 1 : 0);
-    const startVal = { val: 0 };
-
-    gsap.to(startVal, {
-      val: target,
-      duration: 1.2,
-      ease: "power2.out",
-      onUpdate: () => {
-        el.textContent = startVal.val.toFixed(decimals) + suffix;
-      }
-    });
-  });
-}
-
-// ----------------------------------------------------------------
-// METRIC BARS
-// ----------------------------------------------------------------
-function initMetricBars() {
-  // Will be animated on page enter
-}
-
-function animateMetricBars() {
-  document.querySelectorAll('.metric-bar-fill').forEach((bar, i) => {
-    const width = bar.dataset.width;
-    gsap.fromTo(bar, { width: '0%' }, {
-      width: width + '%',
-      duration: 1,
-      ease: "back.out(1.2)",
-      delay: i * 0.1
-    });
-  });
-}
-
-// ----------------------------------------------------------------
-// RINGS
-// ----------------------------------------------------------------
-function initRings() {
-  // Will animate on page enter
-}
-
-function animateRings(container) {
-  const rings = container.querySelectorAll('.summary-ring');
-  rings.forEach((ring, i) => {
-    const percent = parseInt(ring.dataset.percent);
-    const circle = ring.querySelector('.ring-fill');
-    if (!circle) return;
-
-    const circumference = 2 * Math.PI * 52; // r = 52
-    const offset = circumference - (percent / 100) * circumference;
-
-    gsap.fromTo(circle, {
-      strokeDashoffset: circumference
-    }, {
-      strokeDashoffset: offset,
-      duration: 1.2,
-      ease: "power3.out",
-      delay: 0.2 + i * 0.15
     });
   });
 }
@@ -804,34 +530,144 @@ async function initThreeBackground() {
 // ================================================================
 
 // ----------------------------------------------------------------
-// LIVE TICKER
+// LIVE TICKER — CoinGecko, hidden if the fetch fails (no fallback prices)
 // ----------------------------------------------------------------
-const tickerItems = [
-  { sym: 'BTC', price: '$94,312', change: '+2.4%', up: true },
-  { sym: 'ETH', price: '$3,218',  change: '+1.8%', up: true },
-  { sym: 'SOL', price: '$182.4',  change: '-0.6%', up: false },
-  { sym: 'AVAX', price: '$41.7',  change: '+3.1%', up: true },
-  { sym: 'MATIC', price: '$0.87', change: '-1.2%', up: false },
-  { sym: 'DOT',  price: '$9.34',  change: '+0.9%', up: true },
-  { sym: 'LINK', price: '$18.6',  change: '+2.2%', up: true },
-  { sym: 'UNI',  price: '$11.2',  change: '-0.4%', up: false },
-  { sym: 'ARB',  price: '$1.34',  change: '+4.7%', up: true },
-  { sym: 'OP',   price: '$2.91',  change: '+1.3%', up: true },
-  { sym: 'Raven Accuracy', price: '98.6%', change: 'Live', up: true },
+const TICKER_URL = 'https://api.coingecko.com/api/v3/simple/price'
+  + '?ids=bitcoin,ethereum,solana,avalanche-2,polkadot,chainlink,uniswap,arbitrum,optimism'
+  + '&vs_currencies=usd&include_24hr_change=true';
+const TICKER_REFRESH_MS = 60000;
+const TICKER_TIMEOUT_MS = 10000;
+const TICKER_TRACK_IDS = ['ticker-track', 'ticker-track-poly'];
+const TICKER_COINS = [
+  { id: 'bitcoin',      sym: 'BTC' },
+  { id: 'ethereum',     sym: 'ETH' },
+  { id: 'solana',       sym: 'SOL' },
+  { id: 'avalanche-2',  sym: 'AVAX' },
+  { id: 'polkadot',     sym: 'DOT' },
+  { id: 'chainlink',    sym: 'LINK' },
+  { id: 'uniswap',      sym: 'UNI' },
+  { id: 'arbitrum',     sym: 'ARB' },
+  { id: 'optimism',     sym: 'OP' },
 ];
 
-function buildTicker(id) {
-  const track = document.getElementById(id);
-  if (!track) return;
-  const html = tickerItems.map(t => `
-    <span class="ticker-item">
-      <span class="ticker-sym">${t.sym}</span>
-      <span>${t.price}</span>
-      <span class="${t.up ? 'ticker-up' : 'ticker-dn'}">${t.change}</span>
-    </span>
-  `).join('');
-  // Duplicate for seamless loop
-  track.innerHTML = html + html;
+function formatTickerPrice(usd) {
+  if (usd >= 1000) return '$' + usd.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  if (usd >= 1)    return '$' + usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return '$' + usd.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+}
+
+function formatTickerChange(pct) {
+  return (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+}
+
+// Turns the CoinGecko response into render-ready rows. Coins without a
+// usable USD price are skipped, so a partial response shows only real data.
+function parseTickerRows(data) {
+  if (!data || typeof data !== 'object') return [];
+  const rows = [];
+  TICKER_COINS.forEach(({ id, sym }) => {
+    const entry = data[id];
+    const usd = entry && Number(entry.usd);
+    if (!Number.isFinite(usd) || usd <= 0) return;
+    const change = Number(entry.usd_24h_change);
+    rows.push({
+      sym,
+      price: formatTickerPrice(usd),
+      change: Number.isFinite(change) ? formatTickerChange(change) : '',
+      up: !Number.isFinite(change) || change >= 0,
+    });
+  });
+  return rows;
+}
+
+function buildTickerItem(row) {
+  const item = document.createElement('span');
+  item.className = 'ticker-item';
+  item.dataset.sym = row.sym;
+
+  const sym = document.createElement('span');
+  sym.className = 'ticker-sym';
+  sym.textContent = row.sym;
+
+  const price = document.createElement('span');
+  price.className = 'ticker-price';
+  price.textContent = row.price;
+
+  item.append(sym, price);
+
+  if (row.change) {
+    const change = document.createElement('span');
+    change.className = 'ticker-change ' + (row.up ? 'ticker-up' : 'ticker-dn');
+    change.textContent = row.change;
+    item.append(change);
+  }
+  return item;
+}
+
+function setTickerVisible(visible) {
+  TICKER_TRACK_IDS.forEach(id => {
+    const track = document.getElementById(id);
+    const ticker = track && track.closest('.ticker');
+    if (ticker) ticker.hidden = !visible;
+  });
+}
+
+function renderTicker(rows) {
+  TICKER_TRACK_IDS.forEach(id => {
+    const track = document.getElementById(id);
+    if (!track) return;
+
+    const current = Array.from(track.querySelectorAll('.ticker-item:not([aria-hidden])'));
+    const sameSet = current.length === rows.length
+      && current.every((el, i) => el.dataset.sym === rows[i].sym && !!el.querySelector('.ticker-change') === !!rows[i].change);
+
+    if (sameSet) {
+      // Same coins as the last refresh: update text in place so the scroll animation does not restart.
+      track.querySelectorAll('.ticker-item').forEach(el => {
+        const row = rows.find(r => r.sym === el.dataset.sym);
+        el.querySelector('.ticker-price').textContent = row.price;
+        const change = el.querySelector('.ticker-change');
+        if (change) {
+          change.textContent = row.change;
+          change.className = 'ticker-change ' + (row.up ? 'ticker-up' : 'ticker-dn');
+        }
+      });
+      return;
+    }
+
+    // Duplicate the set for a seamless loop.
+    const items = rows.map(buildTickerItem);
+    const copy = items.map(el => {
+      const clone = el.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      return clone;
+    });
+    track.replaceChildren(...items, ...copy);
+  });
+}
+
+async function refreshTicker() {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TICKER_TIMEOUT_MS);
+  try {
+    const res = await fetch(TICKER_URL, { signal: controller.signal, headers: { accept: 'application/json' } });
+    if (!res.ok) throw new Error('CoinGecko responded ' + res.status);
+    const rows = parseTickerRows(await res.json());
+    if (rows.length === 0) throw new Error('CoinGecko returned no prices');
+    renderTicker(rows);
+    setTickerVisible(true);
+  } catch (err) {
+    // No fallback prices: if the live data is not there, the ticker is not either.
+    console.warn('Live ticker unavailable, hiding it:', err);
+    setTickerVisible(false);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function initLiveTicker() {
+  refreshTicker();
+  setInterval(refreshTicker, TICKER_REFRESH_MS);
 }
 
 // ----------------------------------------------------------------
@@ -1087,103 +923,48 @@ function initScrollReveal() {
 }
 
 // ----------------------------------------------------------------
-// POLYMARKET — add sparkline mini-chart to each card
+// POLYMARKET — example questions, each linking to the live odds
 // ----------------------------------------------------------------
-function drawSparkline(canvas, data, color) {
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
-
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const pts = data.map((v, i) => ({
-    x: (i / (data.length - 1)) * W,
-    y: H - ((v - min) / range) * H * 0.8 - H * 0.1
-  }));
-
-  // Fill
-  const grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, color + '40');
-  grad.addColorStop(1, color + '00');
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  pts.forEach(p => ctx.lineTo(p.x, p.y));
-  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
-  ctx.fillStyle = grad;
-  ctx.fill();
-
-  // Line
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  pts.forEach(p => ctx.lineTo(p.x, p.y));
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1.5;
-  ctx.lineJoin = 'round';
-  ctx.stroke();
-}
-
-const sparklineData = {
-  rising:  [40,44,42,48,51,49,55,60,58,65,70,68,75],
-  falling: [80,76,74,70,68,65,60,58,52,48,45,42,38],
-  flat:    [50,52,48,51,49,53,50,48,52,50,51,49,50],
-};
-
-function buildPolymarketCardsV4() {
+function buildPolymarketCards() {
   const grid = document.getElementById('polymarket-grid');
   if (!grid) return;
 
-  grid.innerHTML = polymarketData.map((item, i) => {
-    const trend = item.yes > 50 ? 'rising' : item.yes < 30 ? 'falling' : 'flat';
-    const lineColor = trend === 'rising' ? '#00FFA3' : trend === 'falling' ? '#FF6B35' : '#94A3B8';
-    const canvasId = `spark-${i}`;
-    return `
-      <div class="glass-card prediction-card" data-tilt>
-        <div class="card-glow"></div>
-        <div class="card-border-gradient"></div>
-        <div class="card-content">
-          <p class="prediction-title">${item.title}</p>
-          <div class="prediction-bars">
-            <div class="pred-bar-row">
-              <span class="pred-label yes">Yes</span>
-              <div class="pred-bar-track"><div class="pred-bar-fill yes" data-width="${item.yes}"></div></div>
-              <span class="pred-percent yes">${item.yes}%</span>
-            </div>
-            <div class="pred-bar-row">
-              <span class="pred-label no">No</span>
-              <div class="pred-bar-track"><div class="pred-bar-fill no" data-width="${item.no}"></div></div>
-              <span class="pred-percent no">${item.no}%</span>
-            </div>
-          </div>
-          <canvas class="sparkline-canvas" id="${canvasId}" width="200" height="44" data-trend="${trend}" data-color="${lineColor}" style="width:100%;height:44px;display:block;margin-top:2px"></canvas>
-          <div class="prediction-footer">
-            <div class="pred-meta-row">
-              <span class="pred-volume">${item.volume} <span>Vol.</span></span>
-              <span class="pred-freq-badge">${item.freq}</span>
-            </div>
-            <button class="ask-raven-small">
-              <i data-lucide="sparkles"></i>
-              Ask Raven
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
+  grid.replaceChildren(...polymarketQuestions.map(question => {
+    const card = document.createElement('div');
+    card.className = 'glass-card prediction-card';
+    card.dataset.tilt = '';
+
+    const title = document.createElement('p');
+    title.className = 'prediction-title';
+    title.textContent = question;
+
+    const link = document.createElement('a');
+    link.className = 'ask-raven-small';
+    link.href = POLYMARKET_URL;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    const icon = document.createElement('i');
+    icon.dataset.lucide = 'sparkles';
+    link.append(icon, document.createTextNode(' Ask Raven'));
+
+    const footer = document.createElement('div');
+    footer.className = 'prediction-footer';
+    footer.append(link);
+
+    const content = document.createElement('div');
+    content.className = 'card-content';
+    content.append(title, footer);
+
+    const glow = document.createElement('div');
+    glow.className = 'card-glow';
+    const border = document.createElement('div');
+    border.className = 'card-border-gradient';
+
+    card.append(glow, border, content);
+    return card;
+  }));
 
   if (window.lucide) lucide.createIcons();
-
-  // Draw sparklines
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.sparkline-canvas').forEach(c => {
-      const trend = c.dataset.trend;
-      const color = c.dataset.color;
-      // add small noise
-      const base = [...sparklineData[trend]];
-      const noisy = base.map(v => v + (Math.random() - 0.5) * 6);
-      drawSparkline(c, noisy, color);
-    });
-  });
 }
 
 // ----------------------------------------------------------------
@@ -1221,11 +1002,8 @@ function initQuestionCards() {
 // REGISTER ALL V4 INITS on DOMContentLoaded
 // ----------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-  buildTicker('ticker-track');
-  buildTicker('ticker-track-poly');
-
-  // Replace old polymarket builder with V4 version
-  buildPolymarketCardsV4();
+  initLiveTicker();
+  buildPolymarketCards();
 
   initHeroCanvas();
   initScrollReveal();

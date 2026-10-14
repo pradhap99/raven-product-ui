@@ -21,7 +21,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Raven AI — Crypto Prediction Platform</title>
-<meta name="description" content="AI-powered crypto prediction platform with real-time market analysis, Polymarket predictions, and institutional-grade accuracy.">
+<meta name="description" content="AI-powered crypto and prediction-market forecasts. Every call comes with a probability and a written reason.">
 
 <!-- Fonts -->
 <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
@@ -97,18 +97,18 @@
     </a>
 
     <div class="nav-section-label">
-      <span>Benchmark</span>
+      <span>How we measure</span>
       <i data-lucide="chevron-down" class="nav-section-chevron"></i>
     </div>
 
     <a href="#score" class="nav-item nav-sub" data-page="score">
       <i data-lucide="brain"></i>
-      <span>FT Reasoning Model</span>
+      <span>Method</span>
     </a>
 
     <a href="#math-accuracy" class="nav-item nav-sub" data-page="math-accuracy">
       <i data-lucide="calculator"></i>
-      <span>Mathematical Accuracy</span>
+      <span>Scoring</span>
     </a>
   </nav>
 
@@ -146,11 +146,11 @@
   </a>
   <a href="#score" class="mobile-nav-item" data-page="score">
     <i data-lucide="brain"></i>
-    <span>Score</span>
+    <span>Method</span>
   </a>
   <a href="#math-accuracy" class="mobile-nav-item" data-page="math-accuracy">
     <i data-lucide="calculator"></i>
-    <span>Math</span>
+    <span>Scoring</span>
   </a>
 </nav>
 
@@ -187,7 +187,7 @@
     <section id="page-crypto" class="page active">
 
       <!-- LIVE TICKER -->
-      <div class="ticker" aria-label="Live market ticker">
+      <div class="ticker" aria-label="Live market ticker" title="Prices from CoinGecko" hidden>
         <div class="ticker-track" id="ticker-track"></div>
       </div>
 
@@ -198,20 +198,20 @@
         <div class="hero-content">
           <div class="page-badge hero-badge">
             <span class="hero-badge-dot"></span>
-            <span>Raven AI · Live Predictions</span>
+            <span>Raven AI · Live Paper Trading</span>
           </div>
           <h1 class="hero-title">
             <span class="hero-line">Predict what the</span>
             <span class="hero-line gradient-text">market hasn't priced.</span>
           </h1>
-          <p class="hero-subtitle">A reasoning model fine-tuned on 150M+ data points across crypto, prediction markets and on-chain signals — delivering institutional-grade calls in under a second.</p>
+          <p class="hero-subtitle">Raven forecasts crypto and prediction markets. Every call comes with a probability and a written reason, and is scored against the odds the market already implies.</p>
           <div class="hero-cta-row">
             <a href="#ask" class="btn-primary btn-large hero-cta">
               <i data-lucide="sparkles"></i>
               <span>Ask Raven</span>
             </a>
             <a href="#score" class="btn-ghost btn-large">
-              <span>See benchmarks</span>
+              <span>How we measure</span>
               <i data-lucide="arrow-right"></i>
             </a>
           </div>
@@ -221,28 +221,18 @@
       <!-- STATS STRIP -->
       <div class="stats-strip" data-reveal>
         <div class="stat">
-          <div class="stat-value"><span class="count-up" data-value="98.6" data-suffix="%">0%</span></div>
-          <div class="stat-label">Price Accuracy</div>
+          <div class="stat-value">Brier-scored</div>
+          <div class="stat-label">Every forecast is graded on calibration</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <div class="stat-value"><span class="count-up" data-value="94.7" data-suffix="%">0%</span></div>
-          <div class="stat-label">Directional</div>
+          <div class="stat-value">Market baseline</div>
+          <div class="stat-label">Compared with the odds the market already implies</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <div class="stat-value"><span class="count-up" data-value="150" data-suffix="M+">0</span></div>
-          <div class="stat-label">Signals Analyzed</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <div class="stat-value"><span class="count-up" data-value="0.8" data-suffix="s" data-decimals="1">0s</span></div>
-          <div class="stat-label">Inference</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <div class="stat-value"><span class="status-live"><span class="live-dot"></span>Live</span></div>
-          <div class="stat-label">24/7 Streaming</div>
+          <div class="stat-value">Paper trading</div>
+          <div class="stat-label">Live, before any real money</div>
         </div>
       </div>
 
@@ -250,7 +240,7 @@
         <div class="page-header-content">
           <div class="section-eyebrow">Examples</div>
           <h2 class="section-title-lg">Try a question</h2>
-          <p class="page-subtitle">Tap any prompt or write your own — Raven returns a reasoned, sourced answer.</p>
+          <p class="page-subtitle">Tap any prompt or write your own — Raven returns a probability and a written reason.</p>
         </div>
       </div>
 
@@ -366,8 +356,8 @@
             <div class="card-content">
               <div class="feature-icon cyan"><i data-lucide="cpu"></i></div>
               <h3 class="feature-title">Reasoning, not regression.</h3>
-              <p class="feature-desc">Sota-Gpt-oss-20b with AdaLoRA fine-tuning weighs evidence step-by-step before issuing a call.</p>
-              <div class="feature-stat"><span class="mono-value">98.6%</span><span class="feature-stat-label">price accuracy</span></div>
+              <p class="feature-desc">Built on gpt-oss-20b, fine-tuned with LoRA. It weighs evidence step-by-step before issuing a call.</p>
+              <div class="feature-stat"><span class="mono-value">Brier-scored</span><span class="feature-stat-label">every forecast</span></div>
             </div>
           </article>
           <article class="glass-card feature-card" data-tilt>
@@ -376,16 +366,16 @@
               <div class="feature-icon purple"><i data-lucide="radio"></i></div>
               <h3 class="feature-title">On-chain & social fused.</h3>
               <p class="feature-desc">LunarCrush sentiment, Polymarket odds, exchange flows and whale wallets — distilled into one signal.</p>
-              <div class="feature-stat"><span class="mono-value">12+</span><span class="feature-stat-label">live data sources</span></div>
+              <div class="feature-stat"><span class="mono-value">Multi-source</span><span class="feature-stat-label">news, social and on-chain data</span></div>
             </div>
           </article>
           <article class="glass-card feature-card" data-tilt>
             <div class="card-border-gradient"></div>
             <div class="card-content">
               <div class="feature-icon green"><i data-lucide="zap"></i></div>
-              <h3 class="feature-title">Sub-second answers.</h3>
+              <h3 class="feature-title">Answers in seconds.</h3>
               <p class="feature-desc">GPU-optimized inference with OpenAI-compatible streaming. Plug into any agent or terminal.</p>
-              <div class="feature-stat"><span class="mono-value">&lt;1s</span><span class="feature-stat-label">end-to-end latency</span></div>
+              <div class="feature-stat"><span class="mono-value">Seconds</span><span class="feature-stat-label">to an answer</span></div>
             </div>
           </article>
         </div>
@@ -399,7 +389,7 @@
             <i data-lucide="sparkles"></i>
           </div>
           <div class="banner-text">
-            <h3>Unlock institutional-grade signals</h3>
+            <h3>Unlock full access to Raven</h3>
             <p>Unlimited predictions · Priority inference · Portfolio integration · API access</p>
           </div>
           <div class="banner-ctas">
@@ -435,7 +425,7 @@
     <section id="page-polymarket" class="page">
 
       <!-- LIVE TICKER -->
-      <div class="ticker" aria-label="Live market ticker">
+      <div class="ticker" aria-label="Live market ticker" title="Prices from CoinGecko" hidden>
         <div class="ticker-track" id="ticker-track-poly"></div>
       </div>
 
@@ -446,13 +436,12 @@
             <span>Raven AI · Prediction Markets</span>
           </div>
           <h1 class="hero-title-sm gradient-text">Polymarket Predictions</h1>
-          <p class="page-subtitle">AI-calibrated probability on 12 live prediction markets.</p>
+          <p class="page-subtitle">Raven forecasts prediction markets, with a probability and a written reason for every call. Pick a question below to ask Raven. Live odds are on <a href="https://www.raven-agent.com/polymarket" target="_blank" rel="noopener noreferrer">raven-agent.com</a>.</p>
         </div>
-        <div class="page-header-stats">
-          <div class="header-stat"><span class="mono-value accent-cyan">12</span><span>Live Markets</span></div>
-          <div class="header-stat"><span class="mono-value accent-green">$2.4B+</span><span>Total Volume</span></div>
-          <div class="header-stat"><span class="mono-value accent-purple">Daily</span><span>Updates</span></div>
-        </div>
+      </div>
+
+      <div class="group-label">
+        <div class="section-eyebrow">Example questions</div>
       </div>
 
       <div class="cards-grid polymarket-grid" id="polymarket-grid" data-reveal-children>
@@ -473,8 +462,6 @@
         </div>
         <div class="filter-pills">
           <button class="pill active">All Markets</button>
-          <button class="pill">High Volume</button>
-          <button class="pill">Ending Soon</button>
           <button class="pill">Geopolitics</button>
           <button class="pill">Sports</button>
           <button class="pill">Politics</button>
@@ -482,262 +469,115 @@
       </div>
     </section>
 
-    <!-- =================== SCORE PAGE =================== -->
+    <!-- =================== SCORE PAGE (How we measure: method) =================== -->
     <section id="page-score" class="page">
       <div class="page-header section-spacer" data-reveal>
         <div class="page-header-content">
           <div class="page-badge">
             <span class="hero-badge-dot" style="background:var(--accent-green)"></span>
-            <span>Benchmark · FT Reasoning Model</span>
+            <span>How we measure · Method</span>
           </div>
-          <h1 class="hero-title-sm gradient-text">Academic-grade accuracy.<br>Real-time speed.</h1>
-          <p class="page-subtitle">Sota-Gpt-oss-20b with Adaptive LoRA (AdaLoRA) fine-tuning — GPU-optimized for real-time crypto market analysis and prediction.</p>
+          <h1 class="hero-title-sm gradient-text">How we measure Raven.</h1>
+          <p class="page-subtitle">Built on gpt-oss-20b, fine-tuned with LoRA. Raven forecasts crypto and prediction markets, and every call comes with a probability and a written reason.</p>
         </div>
       </div>
 
-      <!-- Achievement Cards -->
-      <div class="cards-grid achievement-grid">
-        <div class="glass-card achievement-card" data-tilt>
+      <!-- How we measure -->
+      <div class="cards-grid achievement-grid measure-grid">
+        <div class="glass-card achievement-card measure-card" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
-            <div class="achievement-icon cyan"><i data-lucide="target"></i></div>
-            <div class="achievement-value count-up" data-value="98.6" data-suffix="%">0%</div>
-            <h3 class="achievement-title">Price Prediction Accuracy</h3>
-            <p class="achievement-desc">Industry-leading performance on Bitcoin market predictions.</p>
+            <div class="achievement-icon cyan"><i data-lucide="clock"></i></div>
+            <h3 class="achievement-title">Point-in-time data</h3>
+            <p class="achievement-desc">Backtests only use what was known at the time.</p>
           </div>
         </div>
 
-        <div class="glass-card achievement-card" data-tilt>
+        <div class="glass-card achievement-card measure-card" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
-            <div class="achievement-icon purple"><i data-lucide="minimize-2"></i></div>
-            <div class="achievement-value count-up" data-value="99.9" data-suffix="%">0%</div>
-            <h3 class="achievement-title">Parameter Reduction</h3>
-            <p class="achievement-desc">Only 21M trainable parameters vs 20B base model.</p>
+            <div class="achievement-icon purple"><i data-lucide="target"></i></div>
+            <h3 class="achievement-title">Brier score and calibration</h3>
+            <p class="achievement-desc">When Raven says 70%, it should happen about 70% of the time. That's what we grade.</p>
           </div>
         </div>
 
-        <div class="glass-card achievement-card" data-tilt>
+        <div class="glass-card achievement-card measure-card" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
-            <div class="achievement-icon green"><i data-lucide="rocket"></i></div>
-            <div class="achievement-value">Production Ready</div>
-            <h3 class="achievement-title">Live Deployment</h3>
-            <p class="achievement-desc">OpenAI-compatible API server with live market integration.</p>
+            <div class="achievement-icon green"><i data-lucide="scale"></i></div>
+            <h3 class="achievement-title">Market baseline</h3>
+            <p class="achievement-desc">Every forecast is compared with the probability the market already implies.</p>
           </div>
         </div>
 
-        <div class="glass-card achievement-card" data-tilt>
+        <div class="glass-card achievement-card measure-card" data-tilt>
           <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
-            <div class="achievement-icon cyan"><i data-lucide="flask-conical"></i></div>
-            <div class="achievement-value">BERT: <span class="mono-value count-up" data-value="0.630" data-decimals="3">0.000</span></div>
-            <h3 class="achievement-title">Comprehensive Benchmarks</h3>
-            <p class="achievement-desc">BERT Score: 0.630, ROUGE-L evaluation framework.</p>
-          </div>
-        </div>
-
-        <div class="glass-card achievement-card" data-tilt>
-          <div class="card-glow"></div>
-          <div class="card-border-gradient"></div>
-          <div class="card-content">
-            <div class="achievement-icon purple"><i data-lucide="file-text"></i></div>
-            <div class="achievement-value"><span class="mono-value count-up" data-value="30" data-suffix="+">0</span> Pages</div>
-            <h3 class="achievement-title">Academic Documentation</h3>
-            <p class="achievement-desc">Complete LaTeX report with 30+ pages of analysis.</p>
-          </div>
-        </div>
-
-        <div class="glass-card achievement-card" data-tilt>
-          <div class="card-glow"></div>
-          <div class="card-border-gradient"></div>
-          <div class="card-content">
-            <div class="achievement-icon green"><i data-lucide="zap"></i></div>
-            <div class="achievement-value"><span class="mono-value count-up" data-value="150" data-suffix="+">0</span> Posts</div>
-            <h3 class="achievement-title">Real-time Processing</h3>
-            <p class="achievement-desc">150+ post analysis with LunarCrush API integration.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Evaluation Tables -->
-      <div class="tables-section">
-        <div class="glass-card table-card">
-          <div class="card-border-gradient"></div>
-          <div class="card-content">
-            <h3 class="table-title"><i data-lucide="table-2"></i> Evaluation Results</h3>
-            <div class="table-wrapper">
-              <table>
-                <thead>
-                  <tr><th>Metric</th><th>Score</th><th>Rating</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>BERT Score</td><td class="mono-value">0.630</td><td><span class="rating-badge good">Good</span></td></tr>
-                  <tr><td>ROUGE-L</td><td class="mono-value">0.142</td><td><span class="rating-badge moderate">Moderate</span></td></tr>
-                  <tr><td>Perplexity</td><td class="mono-value">3.21</td><td><span class="rating-badge excellent">Excellent</span></td></tr>
-                  <tr><td>Response Coherence</td><td class="mono-value">0.847</td><td><span class="rating-badge excellent">Excellent</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="glass-card table-card">
-          <div class="card-border-gradient"></div>
-          <div class="card-content">
-            <h3 class="table-title"><i data-lucide="candlestick-chart"></i> Market Prediction Accuracy</h3>
-            <div class="table-wrapper">
-              <table>
-                <thead>
-                  <tr><th>Asset</th><th>Direction</th><th>Price Accuracy</th><th>Status</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>Bitcoin (BTC)</td><td class="mono-value">94.7%</td><td class="mono-value">98.6%</td><td><span class="status-live"><span class="live-dot"></span>Live</span></td></tr>
-                  <tr><td>Ethereum (ETH)</td><td class="mono-value">91.2%</td><td class="mono-value">96.4%</td><td><span class="status-live"><span class="live-dot"></span>Live</span></td></tr>
-                  <tr><td>Solana (SOL)</td><td class="mono-value">89.8%</td><td class="mono-value">94.1%</td><td><span class="status-beta">Beta</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Live Results -->
-      <div class="live-results">
-        <h3 class="section-title"><span class="live-dot"></span> Live Results</h3>
-        <div class="results-row">
-          <div class="result-metric glass-card">
-            <div class="card-border-gradient"></div>
-            <div class="metric-label">Posts Processed</div>
-            <div class="metric-value">
-              <span class="mono-value count-up" data-value="150">0</span><span class="metric-total">/150</span>
-            </div>
-            <div class="metric-bar"><div class="metric-bar-fill" data-width="100"></div></div>
-          </div>
-          <div class="result-metric glass-card">
-            <div class="card-border-gradient"></div>
-            <div class="metric-label">Price Predictions</div>
-            <div class="metric-value"><span class="mono-value count-up" data-value="98.6" data-suffix="%">0%</span></div>
-            <div class="metric-bar"><div class="metric-bar-fill green" data-width="98.6"></div></div>
-          </div>
-          <div class="result-metric glass-card">
-            <div class="card-border-gradient"></div>
-            <div class="metric-label">Logic Scores</div>
-            <div class="metric-value"><span class="mono-value count-up" data-value="80.9" data-suffix="%">0%</span></div>
-            <div class="metric-bar"><div class="metric-bar-fill purple" data-width="80.9"></div></div>
-          </div>
-          <div class="result-metric glass-card">
-            <div class="card-border-gradient"></div>
-            <div class="metric-label">Direction Accuracy</div>
-            <div class="metric-value"><span class="mono-value count-up" data-value="94.7" data-suffix="%">0%</span></div>
-            <div class="metric-bar"><div class="metric-bar-fill cyan" data-width="94.7"></div></div>
-          </div>
-          <div class="result-metric glass-card">
-            <div class="card-border-gradient"></div>
-            <div class="metric-label">Processing Speed</div>
-            <div class="metric-value"><span class="mono-value">&lt;1s</span></div>
-            <div class="metric-bar"><div class="metric-bar-fill green" data-width="95"></div></div>
+            <div class="achievement-icon cyan"><i data-lucide="activity"></i></div>
+            <h3 class="achievement-title">Status</h3>
+            <p class="achievement-desc">Raven is in live paper trading. We'll publish results once the out-of-sample period is complete.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- =================== MATH ACCURACY PAGE =================== -->
+    <!-- =================== MATH ACCURACY PAGE (How we measure: scoring) =================== -->
     <section id="page-math-accuracy" class="page">
       <div class="page-header section-spacer" data-reveal>
         <div class="page-header-content">
           <div class="page-badge">
             <span class="hero-badge-dot" style="background:var(--accent-purple)"></span>
-            <span>Benchmark · Mathematical Accuracy</span>
+            <span>How we measure · Scoring</span>
           </div>
-          <h1 class="hero-title-sm gradient-text gradient-purple">Numbers don't lie.</h1>
-          <p class="page-subtitle">Precision metrics across all prediction models — PDDS, directional accuracy, and price deviation.</p>
+          <h1 class="hero-title-sm gradient-text gradient-purple">Calibration over claims.</h1>
+          <p class="page-subtitle">A Brier score is the average squared gap between a forecast probability and what actually happened. Lower is better. We grade Raven on it, and on calibration, against the probability the market already implies.</p>
         </div>
       </div>
 
-      <!-- Model Filters -->
-      <div class="model-filters">
-        <button class="model-btn active" data-model="kryos">Kryos</button>
-        <button class="model-btn" data-model="helion">Helion</button>
-        <button class="model-btn" data-model="astrax">Astrax</button>
-        <button class="model-btn" data-model="temporal">Temporal</button>
-      </div>
-
-      <!-- Metric Tabs -->
-      <div class="tabs-container metric-tabs-container">
-        <div class="tabs metric-tabs">
-          <button class="tab active" data-metric-tab="pdds">PDDS Score</button>
-          <button class="tab" data-metric-tab="directional">Directional Accuracy</button>
-          <button class="tab" data-metric-tab="price">Price Accuracy</button>
-          <div class="tab-indicator metric-tab-indicator"></div>
-        </div>
-      </div>
-
-      <!-- Chart Area -->
-      <div class="glass-card chart-card" data-tilt>
-        <div class="card-border-gradient"></div>
-        <div class="card-content">
-          <div class="chart-header">
-            <h3 class="chart-title" id="chart-title">PDDS Score by Asset</h3>
-            <div class="chart-legend">
-              <span class="legend-item"><span class="legend-dot cyan"></span>Current</span>
-              <span class="legend-item"><span class="legend-dot purple"></span>Previous</span>
-            </div>
-          </div>
-          <div class="chart-area" id="chart-area">
-            <!-- Animated bars injected by JS -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Score Summary Cards -->
-      <div class="cards-grid math-summary-grid">
-        <div class="glass-card summary-card" data-tilt>
+      <!-- How we measure -->
+      <div class="cards-grid achievement-grid measure-grid">
+        <div class="glass-card achievement-card measure-card" data-tilt>
+          <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
-            <div class="summary-ring" data-percent="92">
-              <svg viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="52" class="ring-bg"/>
-                <circle cx="60" cy="60" r="52" class="ring-fill cyan" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
-              </svg>
-              <span class="ring-value count-up" data-value="92" data-suffix="%">0%</span>
-            </div>
-            <h4>Overall PDDS</h4>
-            <p class="text-muted">Prediction Direction & Distance Score</p>
+            <div class="achievement-icon cyan"><i data-lucide="clock"></i></div>
+            <h3 class="achievement-title">Point-in-time data</h3>
+            <p class="achievement-desc">Backtests only use what was known at the time.</p>
           </div>
         </div>
 
-        <div class="glass-card summary-card" data-tilt>
+        <div class="glass-card achievement-card measure-card" data-tilt>
+          <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
-            <div class="summary-ring" data-percent="95">
-              <svg viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="52" class="ring-bg"/>
-                <circle cx="60" cy="60" r="52" class="ring-fill green" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
-              </svg>
-              <span class="ring-value count-up" data-value="95" data-suffix="%">0%</span>
-            </div>
-            <h4>Directional Acc.</h4>
-            <p class="text-muted">Correct direction prediction rate</p>
+            <div class="achievement-icon purple"><i data-lucide="target"></i></div>
+            <h3 class="achievement-title">Brier score and calibration</h3>
+            <p class="achievement-desc">When Raven says 70%, it should happen about 70% of the time. That's what we grade.</p>
           </div>
         </div>
 
-        <div class="glass-card summary-card" data-tilt>
+        <div class="glass-card achievement-card measure-card" data-tilt>
+          <div class="card-glow"></div>
           <div class="card-border-gradient"></div>
           <div class="card-content">
-            <div class="summary-ring" data-percent="97">
-              <svg viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="52" class="ring-bg"/>
-                <circle cx="60" cy="60" r="52" class="ring-fill purple" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
-              </svg>
-              <span class="ring-value count-up" data-value="97" data-suffix="%">0%</span>
-            </div>
-            <h4>Price Accuracy</h4>
-            <p class="text-muted">Deviation within acceptable range</p>
+            <div class="achievement-icon green"><i data-lucide="scale"></i></div>
+            <h3 class="achievement-title">Market baseline</h3>
+            <p class="achievement-desc">Every forecast is compared with the probability the market already implies.</p>
+          </div>
+        </div>
+
+        <div class="glass-card achievement-card measure-card" data-tilt>
+          <div class="card-glow"></div>
+          <div class="card-border-gradient"></div>
+          <div class="card-content">
+            <div class="achievement-icon cyan"><i data-lucide="activity"></i></div>
+            <h3 class="achievement-title">Status</h3>
+            <p class="achievement-desc">Raven is in live paper trading. We'll publish results once the out-of-sample period is complete.</p>
           </div>
         </div>
       </div>
@@ -802,7 +642,7 @@
       <div class="footer-links">
         <a href="#crypto">Crypto</a>
         <a href="#polymarket">Polymarket</a>
-        <a href="#score">Benchmarks</a>
+        <a href="#score">How we measure</a>
         <a href="#points">Points</a>
       </div>
       <div class="footer-bottom">
